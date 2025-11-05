@@ -17,7 +17,20 @@
       "Bash(netstat:*)",
       "Bash(awk:*)",
       "Bash(PORT=3334 npm run dev:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$(cat <<''EOF''\nfeat: Complete WhyNotAct political action platform\n\n- Multi-step questionnaire with 4 political theme paths\n- Dynamic result routing based on user responses and theme\n- Sanity CMS integration for content management\n- Beautiful UI with shadcn/ui and Framer Motion\n- Full TypeScript type safety\n- Mobile-responsive design with accessibility features\n- Production build verified and passing\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
+      "Bash(gh --version:*)",
+      "Bash(gh auth:*)",
+      "Bash(gh api:*)",
+      "Bash(gh repo create:*)",
+      "Bash(git push:*)",
+      "Bash(vercel --version:*)",
+      "Bash(vercel link:*)",
+      "Bash(vercel env add:*)",
+      "Bash(vercel deploy:*)",
+      "Bash(git commit:*)",
+      "Bash(vercel logs:*)",
+      "Bash(vercel:*)"
     ],
     "deny": [],
     "ask": []
