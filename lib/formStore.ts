@@ -1,3 +1,11 @@
+/**
+ * @deprecated This store is kept for backward compatibility only.
+ * New features should use lib/journeyStore.ts which implements the enhanced
+ * 4-layer persuasion architecture with multi-dimensional scoring.
+ *
+ * Migration guide: See lib/journeyStore.ts for the new API
+ */
+
 import {create} from 'zustand'
 import {persist} from 'zustand/middleware'
 import type {Theme, Answer, FormState} from '@/types/form'

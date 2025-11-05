@@ -30,7 +30,11 @@
       "Bash(vercel deploy:*)",
       "Bash(git commit:*)",
       "Bash(vercel logs:*)",
-      "Bash(vercel:*)"
+      "Bash(vercel:*)",
+      "Bash(npx tsc:*)",
+      "Bash(node -e:*)",
+      "Bash(node -c:*)",
+      "Bash(timeout 10 bash -c \"while [ -f ''''f:\\dev\\voyager\\clients\\why-not-act\\why-not-act\\.next\\lock'''' ]; do sleep 1; done\")"
     ],
     "deny": [],
     "ask": []
