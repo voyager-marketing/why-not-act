@@ -81,8 +81,8 @@ export function PoliticalLensQuiz() {
   }
 
   return (
-    <section className="relative py-16 px-4">
-      <div className="container mx-auto max-w-5xl">
+    <section className="relative py-16 px-4 w-full">
+      <div className="mx-auto max-w-5xl w-full">
         <motion.div
           initial={{opacity: 0, y: 20}}
           animate={{opacity: 1, y: 0}}
