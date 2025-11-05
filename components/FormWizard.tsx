@@ -10,7 +10,7 @@ import {motion, AnimatePresence} from 'framer-motion'
 import {Progress} from '@/components/ui/progress'
 import {Badge} from '@/components/ui/badge'
 import {Card} from '@/components/ui/card'
-import {ChevronLeft} from 'lucide-react'
+import {ChevronLeft, Home} from 'lucide-react'
 
 interface Props {
   questions: Question[]
@@ -76,14 +76,23 @@ export default function FormWizard({questions, theme}: Props) {
           className="mb-8"
         >
           <div className="flex items-center justify-between mb-4">
-            <button
-              onClick={handleBack}
-              disabled={currentStep === 0}
-              className="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-            >
-              <ChevronLeft className="w-4 h-4" />
-              Back
-            </button>
+            {currentStep === 0 ? (
+              <button
+                onClick={() => router.push('/')}
+                className="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100 transition-colors"
+              >
+                <Home className="w-4 h-4" />
+                Start Over
+              </button>
+            ) : (
+              <button
+                onClick={handleBack}
+                className="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100 transition-colors"
+              >
+                <ChevronLeft className="w-4 h-4" />
+                Back
+              </button>
+            )}
             <Badge variant="secondary" className="capitalize">
               {theme.replace('-', ' ')}
             </Badge>
