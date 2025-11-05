@@ -73,7 +73,7 @@ export default function HomePage() {
               initial={{opacity: 0, y: 50}}
               animate={{opacity: 1, y: 0}}
               transition={{duration: 0.5}}
-              className="min-h-screen flex items-center"
+              className="min-h-screen flex items-center justify-center w-full"
             >
               {/* Stage 2: Political Lens Quiz */}
               <PoliticalLensQuiz />
