@@ -1,6 +1,6 @@
 'use client'
 
-import {useState, useRef} from 'react'
+import {useState, useRef, useEffect} from 'react'
 import {motion, useInView} from 'framer-motion'
 import type {PoliticalLens} from '@/lib/journeyStore'
 import {Card, CardContent} from '@/components/ui/card'
@@ -220,12 +220,14 @@ export default function ImpactVisualizationLayer({onComplete}: Props) {
     })
   }
 
-  // Show reflection question when user scrolls through all impacts
-  const handleImpactsViewed = () => {
-    if (!showReflection) {
+  // Auto-show reflection after impacts are rendered
+  useEffect(() => {
+    const timer = setTimeout(() => {
       setShowReflection(true)
-    }
-  }
+    }, 2000) // Show after 2 seconds to allow impacts to be seen
+
+    return () => clearTimeout(timer)
+  }, [])
 
   return (
     <div className="max-w-4xl mx-auto space-y-8">
@@ -245,7 +247,7 @@ export default function ImpactVisualizationLayer({onComplete}: Props) {
       </motion.div>
 
       {/* Stage 2: Ideology-Specific Impacts */}
-      <div className="space-y-6 mb-12" onMouseEnter={handleImpactsViewed}>
+      <div className="space-y-6 mb-12">
         {lensImpacts.impacts.map((impact, index) => (
           <ImpactCard key={index} impact={impact} index={index} />
         ))}
@@ -328,17 +330,17 @@ export default function ImpactVisualizationLayer({onComplete}: Props) {
       {/* Continue Button */}
       {reflectionResponse !== null && (
         <motion.div
-          initial={{opacity: 0}}
-          animate={{opacity: 1}}
+          initial={{opacity: 0, y: 20}}
+          animate={{opacity: 1, y: 0}}
           transition={{delay: 0.5}}
-          className="flex justify-center sticky bottom-8"
+          className="flex justify-center pb-12"
         >
           <Button
             onClick={onComplete}
             size="lg"
-            className="px-12 py-6 text-xl font-bold shadow-2xl"
+            className="px-12 py-6 text-xl font-bold shadow-2xl bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700"
           >
-            Continue
+            Continue to Reflection
             <ArrowRight className="ml-2 w-6 h-6" />
           </Button>
         </motion.div>

@@ -98,13 +98,17 @@ interface Props {
 }
 
 export default function SolutionIntroductionLayer({theme, onAnswer, onComplete}: Props) {
-  const [stage, setStage] = useState<1 | 2>(1)
+  const [stage, setStage] = useState<0 | 1 | 2>(0)
   const [answered, setAnswered] = useState(false)
   const startTimeRef = useRef<number>(Date.now())
   const {recordResponse} = useJourneyStore()
   const {language} = useTheme()
 
   const valuesContent = VALUES_CONTENT[theme]
+
+  const handleContinueToStage1 = () => {
+    setStage(1)
+  }
 
   const handleContinueToStage2 = () => {
     setStage(2)
@@ -132,6 +136,68 @@ export default function SolutionIntroductionLayer({theme, onAnswer, onComplete}:
 
   return (
     <div className="space-y-8 max-w-5xl mx-auto px-4">
+      {/* Stage 0: Introduction */}
+      {stage === 0 && (
+        <motion.div
+          initial={{opacity: 0, y: 20}}
+          animate={{opacity: 1, y: 0}}
+          transition={{duration: 0.5}}
+        >
+          <Card className="shadow-2xl border-2 border-purple-200 dark:border-purple-800">
+            <CardHeader className="bg-gradient-to-r from-purple-50 to-blue-50 dark:from-gray-800 dark:to-gray-800">
+              <CardTitle className="text-3xl md:text-4xl text-center font-bold">
+                💡 The Idea Layer — "A Fair Fine"
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="p-8 md:p-12">
+              <div className="space-y-8">
+                {/* Main introduction text */}
+                <motion.p
+                  initial={{opacity: 0, y: 10}}
+                  animate={{opacity: 1, y: 0}}
+                  transition={{delay: 0.2, duration: 0.5}}
+                  className="text-xl md:text-2xl text-gray-700 dark:text-gray-300 leading-relaxed italic"
+                >
+                  "Imagine this: Instead of chaos, uncertainty, or political shouting… what if there were a simple, straightforward process that restores order, rewards honesty, and strengthens the country?
+                </motion.p>
+
+                <motion.p
+                  initial={{opacity: 0, y: 10}}
+                  animate={{opacity: 1, y: 0}}
+                  transition={{delay: 0.4, duration: 0.5}}
+                  className="text-xl md:text-2xl text-gray-700 dark:text-gray-300 leading-relaxed italic"
+                >
+                  A process that gives undocumented immigrants a chance to step out of the shadows — and gives America a system that actually works."
+                </motion.p>
+
+                {/* Transition text */}
+                <motion.div
+                  initial={{opacity: 0}}
+                  animate={{opacity: 1}}
+                  transition={{delay: 0.8, duration: 0.5}}
+                  className="pt-6 border-t border-gray-200 dark:border-gray-700"
+                >
+                  <h3 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-gray-100 text-center mb-8">
+                    Here's the idea that could make that possible:
+                  </h3>
+
+                  <div className="flex justify-center">
+                    <Button
+                      onClick={handleContinueToStage1}
+                      size="lg"
+                      className="px-8 py-6 text-lg"
+                    >
+                      Continue
+                      <ArrowRight className="ml-2 w-5 h-5" />
+                    </Button>
+                  </div>
+                </motion.div>
+              </div>
+            </CardContent>
+          </Card>
+        </motion.div>
+      )}
+
       {/* Stage 1: Universal Explanation */}
       {stage === 1 && (
         <motion.div
