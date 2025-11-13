@@ -188,7 +188,6 @@ function ImpactCard({impact, index}: ImpactCardProps) {
 export default function ImpactVisualizationLayer({onComplete}: Props) {
   const {politicalLens, markDataPointViewed, recordResponse} = useJourneyStore()
   const [reflectionResponse, setReflectionResponse] = useState<'yes' | 'maybe' | null>(null)
-  const [showReflection, setShowReflection] = useState(false)
   const reflectionRef = useRef(null)
   const isReflectionInView = useInView(reflectionRef, {once: true})
 
@@ -220,31 +219,6 @@ export default function ImpactVisualizationLayer({onComplete}: Props) {
     })
   }
 
-  // Auto-show reflection after impacts are rendered
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowReflection(true)
-    }, 3500) // Show after 3.5 seconds to allow all impacts to animate in
-
-    return () => clearTimeout(timer)
-  }, [])
-
-  // Also show reflection when user scrolls near the bottom
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrollPosition = window.scrollY + window.innerHeight
-      const documentHeight = document.documentElement.scrollHeight
-
-      // Show reflection when user scrolls past 60% of the page
-      if (scrollPosition > documentHeight * 0.6) {
-        setShowReflection(true)
-      }
-    }
-
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
-
   return (
     <div className="max-w-4xl mx-auto space-y-8 px-4 pb-24">
       {/* Stage 1: Universal Intro */}
@@ -269,15 +243,14 @@ export default function ImpactVisualizationLayer({onComplete}: Props) {
         ))}
       </div>
 
-      {/* Reflection Question */}
-      {showReflection && (
-        <motion.div
-          ref={reflectionRef}
-          initial={{opacity: 0, y: 30}}
-          animate={isReflectionInView ? {opacity: 1, y: 0} : {opacity: 0, y: 30}}
-          transition={{duration: 0.6}}
-          className="mb-12"
-        >
+      {/* Reflection Question - Always visible */}
+      <motion.div
+        ref={reflectionRef}
+        initial={{opacity: 0, y: 30}}
+        animate={isReflectionInView ? {opacity: 1, y: 0} : {opacity: 0, y: 30}}
+        transition={{duration: 0.6}}
+        className="mb-12"
+      >
           <Card className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-gray-800 dark:to-gray-800 shadow-xl">
             <CardContent className="p-10">
               <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6 text-center">
@@ -318,8 +291,7 @@ export default function ImpactVisualizationLayer({onComplete}: Props) {
               )}
             </CardContent>
           </Card>
-        </motion.div>
-      )}
+      </motion.div>
 
       {/* Stage 3: Universal Closing */}
       {reflectionResponse !== null && (
