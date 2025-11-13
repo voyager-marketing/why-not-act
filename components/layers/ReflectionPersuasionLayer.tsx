@@ -169,11 +169,17 @@ export default function ReflectionPersuasionLayer({
                   initial={{opacity: 0}}
                   animate={{opacity: 1}}
                   transition={{delay: 1.6}}
-                  className="pt-6 space-y-4"
+                  className="pt-6 space-y-6"
                 >
-                  <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
-                    The question isn't whether you agree with every detail. The question is: Are you tired of decades of political gridlock? Are you ready to try something new?
+                  <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed italic">
+                    "Our system is broken because we've stopped listening. This idea doesn't belong to one party — it belongs to anyone who believes in accountability and opportunity."
                   </p>
+
+                  <div className="text-center">
+                    <p className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-2">
+                      Would you help start a real conversation about this idea?
+                    </p>
+                  </div>
                 </motion.div>
 
                 {/* Call to Action */}
@@ -181,17 +187,8 @@ export default function ReflectionPersuasionLayer({
                   initial={{opacity: 0, scale: 0.95}}
                   animate={{opacity: 1, scale: 1}}
                   transition={{delay: 1.8}}
-                  className="pt-8"
+                  className="pt-6"
                 >
-                  <div className="text-center mb-6">
-                    <p className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-2">
-                      Are you ready to take action?
-                    </p>
-                    <p className="text-gray-600 dark:text-gray-400">
-                      Let's explore what you can do next.
-                    </p>
-                  </div>
-
                   <Button
                     onClick={handleReadyForAction}
                     size="lg"
@@ -202,7 +199,7 @@ export default function ReflectionPersuasionLayer({
                       <span>Loading...</span>
                     ) : (
                       <>
-                        <span>I'm Ready</span>
+                        <span>Yes, Let's Take Action</span>
                         <ArrowRight className="w-6 h-6 ml-2" />
                       </>
                     )}

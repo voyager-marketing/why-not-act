@@ -96,10 +96,7 @@ export default function LayerRenderer({
         )}
 
         {currentLayer === 'impact-visualization' && (
-          <ImpactVisualizationLayer
-            theme={theme}
-            onComplete={onLayerComplete}
-          />
+          <ImpactVisualizationLayer onComplete={onLayerComplete} />
         )}
 
         {currentLayer === 'reflection-persuasion' && (

@@ -214,21 +214,41 @@ export default function DataRealityLayer({theme, onComplete}: Props) {
         </div>
       </motion.div>
 
-      {/* Continue Button */}
-      <motion.div
-        initial={{opacity: 0}}
-        animate={{opacity: allAnswered ? 1 : 0.5}}
-        className="flex justify-center sticky bottom-8"
-      >
-        <Button
-          onClick={onComplete}
-          disabled={!allAnswered}
-          size="lg"
-          className="px-12 py-6 text-xl font-bold shadow-2xl"
+      {/* Transition Text */}
+      {allAnswered && (
+        <motion.div
+          initial={{opacity: 0, y: 30}}
+          animate={{opacity: 1, y: 0}}
+          transition={{duration: 0.8, delay: 0.3}}
+          className="max-w-3xl mx-auto mb-12"
         >
-          {allAnswered ? 'Continue to Solution' : 'Answer all questions to continue'}
-        </Button>
-      </motion.div>
+          <Card className="shadow-xl bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 dark:from-gray-800 dark:via-gray-800 dark:to-gray-800 border-2 border-blue-200 dark:border-blue-800">
+            <CardContent className="p-8 md:p-12">
+              <p className="text-xl md:text-2xl text-gray-900 dark:text-gray-100 leading-relaxed text-center font-medium">
+                So if mass deportation costs more than it saves, what if there's a better way? Imagine a solution that rewards honesty, generates billions in revenue, and restores order, without tearing families apart.
+              </p>
+            </CardContent>
+          </Card>
+        </motion.div>
+      )}
+
+      {/* Continue Button */}
+      {allAnswered && (
+        <motion.div
+          initial={{opacity: 0, y: 20}}
+          animate={{opacity: 1, y: 0}}
+          transition={{duration: 0.6, delay: 0.6}}
+          className="flex justify-center pb-12"
+        >
+          <Button
+            onClick={onComplete}
+            size="lg"
+            className="px-12 py-6 text-xl font-bold shadow-2xl hover:shadow-3xl transition-all duration-300"
+          >
+            Continue to Solution
+          </Button>
+        </motion.div>
+      )}
     </div>
   )
 }
