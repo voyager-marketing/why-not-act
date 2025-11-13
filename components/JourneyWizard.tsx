@@ -1,10 +1,11 @@
 'use client'
 
-import {useState, useMemo} from 'react'
+import {useState, useMemo, useEffect} from 'react'
 import {useRouter} from 'next/navigation'
 import {motion, AnimatePresence} from 'framer-motion'
 import type {Theme, Answer} from '@/types/form'
 import {useFormStore} from '@/lib/formStore'
+import {useJourneyStore} from '@/lib/journeyStore'
 import {Progress} from '@/components/ui/progress'
 import {Badge} from '@/components/ui/badge'
 import {Card} from '@/components/ui/card'
@@ -40,9 +41,15 @@ export default function JourneyWizard({theme}: Props) {
   const [completedLayers, setCompletedLayers] = useState<Set<number>>(new Set())
   const router = useRouter()
   const {setAnswer} = useFormStore()
+  const {setLens} = useJourneyStore()
 
   const currentLayer = LAYERS[currentLayerIndex]
   const progress = ((currentLayerIndex + 1) / LAYERS.length) * 100
+
+  // Initialize journey store with political lens
+  useEffect(() => {
+    setLens(theme as any) // Cast to match PoliticalLens type
+  }, [theme, setLens])
 
   // Calculate persuasion score based on all answers
   const persuasionScore = useMemo(() => {
