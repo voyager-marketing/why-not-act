@@ -5,7 +5,9 @@ import {motion, useInView} from 'framer-motion'
 import type {Theme} from '@/types/form'
 import {Card, CardContent, CardHeader, CardTitle} from '@/components/ui/card'
 import {Button} from '@/components/ui/button'
-import {TrendingUp, DollarSign, Users, Building2, Heart, ArrowRight, CheckCircle2} from 'lucide-react'
+import {Shield, TrendingUp, Users, HeartPulse, Building2, ArrowRight, CheckCircle2, AlertCircle, HelpCircle} from 'lucide-react'
+import {useJourneyStore} from '@/lib/journeyStore'
+import {useTheme} from '@/hooks/useTheme'
 
 interface ImpactCategory {
   id: string
@@ -22,94 +24,88 @@ interface ImpactCategory {
     color: string
   }
   description: string
-  microCTA: string
 }
 
 const IMPACT_CATEGORIES: ImpactCategory[] = [
   {
-    id: 'worker-protection',
-    icon: Users,
-    title: 'Worker Protection',
+    id: 'border-security',
+    icon: Shield,
+    title: 'Border Security Funding',
     before: {
-      label: 'Current Recovery Rate',
-      value: '15%',
-      color: 'text-red-600',
+      label: 'Current Border Budget',
+      value: 'Limited',
+      color: 'text-orange-600',
     },
     after: {
-      label: 'With $30K Fine',
-      value: '85%',
+      label: 'With $330B in Fines',
+      value: 'Fully Funded',
       color: 'text-green-600',
     },
-    description: 'Strong penalties mean workers actually get their stolen wages back.',
-    microCTA: 'Workers deserve to be paid',
+    description: '$330 billion in fines would fully fund border wall completion, hire 10,000+ new Border Patrol agents, and deploy advanced surveillance technology.',
   },
   {
-    id: 'business-fairness',
-    icon: Building2,
-    title: 'Fair Competition',
-    before: {
-      label: 'Honest Businesses Undercut',
-      value: 'Daily',
-      color: 'text-red-600',
-    },
-    after: {
-      label: 'Level Playing Field',
-      value: 'Protected',
-      color: 'text-green-600',
-    },
-    description: 'Companies that follow the law won\'t be undercut by wage thieves.',
-    microCTA: 'Reward honest businesses',
-  },
-  {
-    id: 'deterrence',
+    id: 'tax-revenue',
     icon: TrendingUp,
-    title: 'Crime Deterrence',
+    title: 'Increased Tax Revenue',
     before: {
-      label: 'Violations Per Year',
-      value: '2.4M',
+      label: 'Underground Economy',
+      value: '$0/year',
       color: 'text-red-600',
     },
     after: {
-      label: 'Projected Reduction',
-      value: '75%',
+      label: 'New Federal Revenue',
+      value: '$80B+',
       color: 'text-green-600',
     },
-    description: 'Real consequences mean fewer employers will risk stealing wages.',
-    microCTA: 'Stop wage theft before it starts',
+    description: 'Legalizing 11 million workers would increase federal tax revenue by $80+ billion over 10 years.',
   },
   {
-    id: 'economic-impact',
-    icon: DollarSign,
-    title: 'Economic Recovery',
+    id: 'population-stability',
+    icon: Users,
+    title: 'Population Stabilization',
     before: {
-      label: 'Lost Annually',
-      value: '$50B',
+      label: 'Undocumented Population',
+      value: '11M+',
       color: 'text-red-600',
     },
     after: {
-      label: 'Returned to Workers',
-      value: '$40B+',
+      label: 'Projected by 2033',
+      value: 'Declining',
       color: 'text-green-600',
     },
-    description: 'Money goes back into communities instead of into corporate profits.',
-    microCTA: 'Strengthen local economies',
+    description: 'By offering a one-time pathway with strict requirements, the undocumented population would stabilize and decline naturally by 2033.',
   },
   {
-    id: 'family-stability',
-    icon: Heart,
-    title: 'Family Stability',
+    id: 'community-safety',
+    icon: Building2,
+    title: 'Community Safety',
     before: {
-      label: 'Families in Crisis',
-      value: 'Millions',
+      label: 'Crime Reporting',
+      value: 'Suppressed',
       color: 'text-red-600',
     },
     after: {
-      label: 'Protected Families',
-      value: 'Secured',
+      label: 'Community Trust',
+      value: 'Enhanced',
       color: 'text-green-600',
     },
-    description: 'Families can count on the wages they earned to pay rent and buy food.',
-    microCTA: 'Protect working families',
+    description: 'ICE focuses exclusively on criminals. Families can report crimes without fear, making communities safer for everyone.',
+  },
+  {
+    id: 'healthcare-savings',
+    icon: HeartPulse,
+    title: 'Healthcare Savings',
+    before: {
+      label: 'Annual ER Costs',
+      value: '$18B',
+      color: 'text-red-600',
+    },
+    after: {
+      label: 'Regular Healthcare',
+      value: 'Reduced',
+      color: 'text-green-600',
+    },
+    description: 'Undocumented immigrants currently cost emergency rooms $18 billion annually. Legal status means they can get regular healthcare and reduce ER overuse.',
   },
 ]
 
@@ -118,11 +114,34 @@ interface Props {
   onComplete: () => void
 }
 
-function ImpactCard({category, index}: {category: ImpactCategory; index: number}) {
+interface ImpactResponse {
+  impactId: string
+  response: 'yes' | 'maybe' | 'no'
+  timestamp: Date
+}
+
+function ImpactCard({
+  category,
+  index,
+  onResponse,
+  hasResponded,
+}: {
+  category: ImpactCategory
+  index: number
+  onResponse: (response: 'yes' | 'maybe' | 'no') => void
+  hasResponded: boolean
+}) {
   const ref = useRef(null)
   const isInView = useInView(ref, {once: true, margin: '-100px'})
   const [showCTA, setShowCTA] = useState(false)
+  const [selectedResponse, setSelectedResponse] = useState<'yes' | 'maybe' | 'no' | null>(null)
   const Icon = category.icon
+  const {themeConfig} = useTheme()
+
+  const handleResponse = (response: 'yes' | 'maybe' | 'no') => {
+    setSelectedResponse(response)
+    onResponse(response)
+  }
 
   return (
     <motion.div
@@ -133,10 +152,10 @@ function ImpactCard({category, index}: {category: ImpactCategory; index: number}
       onViewportEnter={() => setShowCTA(true)}
     >
       <Card className="shadow-xl hover:shadow-2xl transition-shadow overflow-hidden">
-        <CardHeader className="bg-gradient-to-r from-purple-50 to-blue-50 dark:from-gray-800 dark:to-gray-800">
+        <CardHeader className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-gray-800 dark:to-gray-800">
           <div className="flex items-center gap-3">
-            <div className="bg-purple-100 dark:bg-purple-900 p-3 rounded-full">
-              <Icon className="w-6 h-6 text-purple-600 dark:text-purple-400" />
+            <div className="bg-blue-100 dark:bg-blue-900 p-3 rounded-full">
+              <Icon className="w-6 h-6 text-blue-600 dark:text-blue-400" />
             </div>
             <CardTitle className="text-2xl">{category.title}</CardTitle>
           </div>
@@ -183,26 +202,72 @@ function ImpactCard({category, index}: {category: ImpactCategory; index: number}
             transition={{delay: 0.7}}
             className="flex items-center justify-center mb-6"
           >
-            <ArrowRight className="w-12 h-12 text-purple-600 dark:text-purple-400" />
+            <ArrowRight className="w-12 h-12 text-blue-600 dark:text-blue-400" />
           </motion.div>
 
           {/* Description */}
-          <p className="text-lg text-gray-700 dark:text-gray-300 mb-6 text-center">
+          <p className="text-lg text-gray-700 dark:text-gray-300 mb-8 text-center leading-relaxed">
             {category.description}
           </p>
 
-          {/* Micro CTA */}
+          {/* Micro CTAs */}
           {showCTA && (
             <motion.div
-              initial={{opacity: 0, y: 10}}
+              initial={{opacity: 0, y: 20}}
               animate={{opacity: 1, y: 0}}
               transition={{delay: 0.9}}
-              className="flex items-center justify-center gap-2 p-4 bg-purple-50 dark:bg-purple-900/30 rounded-lg border-2 border-purple-200 dark:border-purple-700"
+              className="space-y-3"
             >
-              <CheckCircle2 className="w-5 h-5 text-purple-600 dark:text-purple-400" />
-              <span className="font-medium text-purple-900 dark:text-purple-100">
-                {category.microCTA}
-              </span>
+              <div className="text-center text-sm font-semibold text-gray-600 dark:text-gray-400 mb-4">
+                Do you support this outcome?
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                {/* Yes Option */}
+                <Button
+                  onClick={() => handleResponse('yes')}
+                  disabled={hasResponded}
+                  variant={selectedResponse === 'yes' ? 'default' : 'outline'}
+                  className={`flex items-center justify-center gap-2 py-6 transition-all ${
+                    selectedResponse === 'yes'
+                      ? 'bg-green-600 hover:bg-green-700 text-white shadow-lg scale-105'
+                      : 'hover:bg-green-50 hover:border-green-300 dark:hover:bg-green-900/20'
+                  }`}
+                >
+                  <CheckCircle2 className="w-5 h-5" />
+                  <span className="font-medium">Yes, I support this</span>
+                </Button>
+
+                {/* Maybe Option */}
+                <Button
+                  onClick={() => handleResponse('maybe')}
+                  disabled={hasResponded}
+                  variant={selectedResponse === 'maybe' ? 'default' : 'outline'}
+                  className={`flex items-center justify-center gap-2 py-6 transition-all ${
+                    selectedResponse === 'maybe'
+                      ? 'bg-yellow-600 hover:bg-yellow-700 text-white shadow-lg scale-105'
+                      : 'hover:bg-yellow-50 hover:border-yellow-300 dark:hover:bg-yellow-900/20'
+                  }`}
+                >
+                  <HelpCircle className="w-5 h-5" />
+                  <span className="font-medium">Maybe, need to think</span>
+                </Button>
+
+                {/* No Option */}
+                <Button
+                  onClick={() => handleResponse('no')}
+                  disabled={hasResponded}
+                  variant={selectedResponse === 'no' ? 'default' : 'outline'}
+                  className={`flex items-center justify-center gap-2 py-6 transition-all ${
+                    selectedResponse === 'no'
+                      ? 'bg-red-600 hover:bg-red-700 text-white shadow-lg scale-105'
+                      : 'hover:bg-red-50 hover:border-red-300 dark:hover:bg-red-900/20'
+                  }`}
+                >
+                  <AlertCircle className="w-5 h-5" />
+                  <span className="font-medium">No, I don't support this</span>
+                </Button>
+              </div>
             </motion.div>
           )}
         </CardContent>
@@ -212,8 +277,40 @@ function ImpactCard({category, index}: {category: ImpactCategory; index: number}
 }
 
 export default function ImpactVisualizationLayer({theme, onComplete}: Props) {
-  const [viewedCount, setViewedCount] = useState(0)
-  const allViewed = viewedCount >= IMPACT_CATEGORIES.length
+  const [responses, setResponses] = useState<ImpactResponse[]>([])
+  const {markDataPointViewed, recordResponse} = useJourneyStore()
+  const {themeConfig} = useTheme()
+
+  const allResponded = responses.length >= IMPACT_CATEGORIES.length
+
+  const handleResponse = (impactId: string, response: 'yes' | 'maybe' | 'no', index: number) => {
+    // Store in local state
+    const newResponse: ImpactResponse = {
+      impactId,
+      response,
+      timestamp: new Date(),
+    }
+    setResponses((prev) => [...prev, newResponse])
+
+    // Store in journey store
+    markDataPointViewed(impactId)
+
+    // Record as a response with persuasion weight
+    // Yes = high persuasion, Maybe = medium, No = low but still engagement
+    const persuasionWeightMap = {yes: 1.0, maybe: 0.5, no: 0.2}
+    const timeSpent = 30 // Estimated time spent viewing impact
+
+    recordResponse(impactId, response, timeSpent, persuasionWeightMap[response])
+  }
+
+  // Calculate persuasion score
+  const persuasionScore = responses.reduce((total, r) => {
+    if (r.response === 'yes') return total + 20
+    if (r.response === 'maybe') return total + 10
+    return total + 0
+  }, 0)
+
+  const hasResponded = (impactId: string) => responses.some((r) => r.impactId === impactId)
 
   return (
     <div className="space-y-8">
@@ -224,39 +321,66 @@ export default function ImpactVisualizationLayer({theme, onComplete}: Props) {
         className="text-center mb-12"
       >
         <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-100 mb-4">
-          The Real-World Impact
+          Immigration Reform: Real-World Impact
         </h2>
         <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-          See how a $30,000 fine changes everything for workers, businesses, and communities.
+          See how comprehensive immigration reform creates measurable outcomes across border security, economy, and community safety.
         </p>
       </motion.div>
 
       {/* Impact Categories */}
       <div className="space-y-8 mb-12">
         {IMPACT_CATEGORIES.map((category, index) => (
-          <div
-            key={category.id}
-            onMouseEnter={() => {
-              if (index >= viewedCount) {
-                setViewedCount(index + 1)
-              }
-            }}
-          >
-            <ImpactCard category={category} index={index} />
+          <div key={category.id}>
+            <ImpactCard
+              category={category}
+              index={index}
+              onResponse={(response) => handleResponse(category.id, response, index)}
+              hasResponded={hasResponded(category.id)}
+            />
           </div>
         ))}
       </div>
 
+      {/* Persuasion Score Summary */}
+      {allResponded && (
+        <motion.div
+          initial={{opacity: 0, y: 20}}
+          animate={{opacity: 1, y: 0}}
+          className="mb-8"
+        >
+          <Card className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-gray-800 dark:to-gray-800 border-2 border-blue-200 dark:border-blue-700">
+            <CardContent className="p-8 text-center">
+              <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">
+                Your Support Level
+              </h3>
+              <div className="text-6xl font-bold text-blue-600 dark:text-blue-400 mb-4">
+                {persuasionScore}%
+              </div>
+              <p className="text-lg text-gray-700 dark:text-gray-300">
+                {persuasionScore >= 80
+                  ? 'You strongly support these immigration reform outcomes!'
+                  : persuasionScore >= 50
+                  ? 'You see value in many of these reform outcomes.'
+                  : persuasionScore >= 30
+                  ? 'You have some reservations but are open to discussion.'
+                  : 'You have significant concerns about these outcomes.'}
+              </p>
+            </CardContent>
+          </Card>
+        </motion.div>
+      )}
+
       {/* Continue Button */}
       <motion.div
         initial={{opacity: 0}}
-        animate={{opacity: allViewed ? 1 : 0.5}}
+        animate={{opacity: allResponded ? 1 : 0.5}}
         className="flex justify-center sticky bottom-8"
       >
         <Button
           onClick={onComplete}
           size="lg"
-          disabled={!allViewed}
+          disabled={!allResponded}
           className="px-12 py-6 text-xl font-bold shadow-2xl"
         >
           Continue Your Journey

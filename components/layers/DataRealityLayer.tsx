@@ -1,93 +1,49 @@
 'use client'
 
-import {useState, useEffect} from 'react'
+import {useState, useEffect, useRef} from 'react'
 import {motion, useInView} from 'framer-motion'
-import {useRef} from 'react'
 import type {Theme} from '@/types/form'
 import {Card, CardContent} from '@/components/ui/card'
 import {Button} from '@/components/ui/button'
-import {TrendingUp, DollarSign, Users, AlertTriangle, FileText, ArrowRight} from 'lucide-react'
+import {CheckCircle, XCircle, AlertCircle} from 'lucide-react'
+import {useJourneyStore} from '@/lib/journeyStore'
 
-interface DataPoint {
+interface ImmigrationFact {
   id: string
-  icon: typeof TrendingUp
-  stat: string
-  label: string
-  explanation: string
-  themedExplanation: Record<Theme, string>
-  source: string
+  question: string
+  lensSpecificFacts: Record<Theme, string>
 }
 
-const DATA_POINTS: DataPoint[] = [
+const IMMIGRATION_FACTS: ImmigrationFact[] = [
   {
-    id: 'wage-theft-scale',
-    icon: DollarSign,
-    stat: '$50B',
-    label: 'Stolen from workers annually',
-    explanation: 'Wage theft exceeds all other property crimes combined in the United States.',
-    themedExplanation: {
-      'far-left': 'This massive theft from working families represents the worst kind of corporate greed - systematic exploitation of labor.',
-      'mid-left': 'This undermines fair competition and hurts businesses that play by the rules.',
-      'mid-right': 'Law-abiding businesses are undercut by companies that cheat workers and the system.',
-      'far-right': 'This theft from hardworking Americans is an assault on those who built this country.',
+    id: 'deportation-cost',
+    question: 'Did you know? Mass deportation of 11 million people would cost between $315 billion and $960 billion—more than the entire annual budget of the Department of Defense.',
+    lensSpecificFacts: {
+      'far-right': 'Mass deportation of 11 million people would cost between $315 billion and $960 billion—more than the entire annual budget of the Department of Defense.',
+      'mid-right': 'Undocumented immigrants paid an estimated $580 billion in taxes over the past decade, including Social Security and Medicare taxes they can\'t claim.',
+      'mid-left': 'More than 5 million U.S. citizen children live in mixed-status households. Deporting their parents would devastate these American families.',
+      'far-left': 'The U.S. immigration system has a backlog of over 3 million cases, with some people waiting more than a decade for their day in court.',
     },
-    source: 'Economic Policy Institute, 2023',
   },
   {
-    id: 'affected-workers',
-    icon: Users,
-    stat: '2.4M',
-    label: 'Workers affected annually',
-    explanation: 'Millions of American workers lose wages they have earned through illegal employer practices.',
-    themedExplanation: {
-      'far-left': 'These are real families struggling to survive while corporations pocket their wages.',
-      'mid-left': 'Communities suffer when workers can\'t afford to support local businesses.',
-      'mid-right': 'Hard-working Americans are being cheated out of money they rightfully earned.',
-      'far-right': 'American workers deserve every dollar they earn - this is theft, plain and simple.',
+    id: 'criminal-record',
+    question: 'Did you know? About 90-95% of undocumented immigrants have no criminal record beyond their immigration status.',
+    lensSpecificFacts: {
+      'far-right': 'About 90-95% of undocumented immigrants have no criminal record beyond their immigration status.',
+      'mid-right': 'Mass deportation would shrink the U.S. economy by $1.6 trillion over 10 years, according to non-partisan economic analyses.',
+      'mid-left': 'Undocumented immigrants own more than 815,000 businesses in the U.S., employing millions of American workers and contributing billions to the economy.',
+      'far-left': 'Many undocumented immigrants fled violence, poverty, or persecution—situations often worsened by U.S. foreign policy.',
     },
-    source: 'U.S. Department of Labor, 2023',
   },
   {
-    id: 'recovery-rate',
-    icon: AlertTriangle,
-    stat: '15%',
-    label: 'Of stolen wages recovered',
-    explanation: 'Current enforcement is weak, and most victims never get their money back.',
-    themedExplanation: {
-      'far-left': 'The system is rigged to protect corporate criminals while workers have no recourse.',
-      'mid-left': 'Weak enforcement fails workers and creates an unfair business environment.',
-      'mid-right': 'Without real consequences, lawbreakers continue to cheat honest workers.',
-      'far-right': 'Criminals are getting away with theft because the government won\'t enforce the law.',
+    id: 'fine-revenue',
+    question: 'Did you know? A $30,000-per-person fine on undocumented immigrants could generate $330 billion—enough to fully fund a border wall, increase ICE enforcement, and hire thousands more Border Patrol agents.',
+    lensSpecificFacts: {
+      'far-right': 'A $30,000-per-person fine on undocumented immigrants could generate $330 billion—enough to fully fund a border wall, increase ICE enforcement, and hire thousands more Border Patrol agents.',
+      'mid-right': 'A $30,000 fine per person would generate $330 billion in revenue—more than enough to offset any costs and fund stronger border security.',
+      'mid-left': 'Undocumented immigrants are significantly less likely to commit crimes than native-born Americans, according to decades of research.',
+      'far-left': 'Providing a pathway to legal status would increase tax revenue by billions annually and grow the economy for everyone.',
     },
-    source: 'National Employment Law Project, 2022',
-  },
-  {
-    id: 'average-loss',
-    icon: TrendingUp,
-    stat: '$3,300',
-    label: 'Average loss per victim',
-    explanation: 'For many families, this represents a month or more of rent, groceries, or bills.',
-    themedExplanation: {
-      'far-left': 'Working families are being driven into poverty by wage theft while CEOs get richer.',
-      'mid-left': 'These losses ripple through communities, hurting everyone.',
-      'mid-right': 'This is money families earned and need to pay their bills and support themselves.',
-      'far-right': 'Hard-earned money stolen from American workers who played by the rules.',
-    },
-    source: 'Center for American Progress, 2023',
-  },
-  {
-    id: 'industries',
-    icon: FileText,
-    stat: '15+',
-    label: 'Industries with widespread theft',
-    explanation: 'From construction to hospitality, healthcare to retail - wage theft is everywhere.',
-    themedExplanation: {
-      'far-left': 'Corporate exploitation has infected every sector of our economy.',
-      'mid-left': 'This is a systemic problem requiring a comprehensive solution.',
-      'mid-right': 'No industry is immune - workers everywhere need protection.',
-      'far-right': 'American workers across all sectors are under attack from dishonest employers.',
-    },
-    source: 'Bureau of Labor Statistics, 2023',
   },
 ]
 
@@ -96,55 +52,34 @@ interface Props {
   onComplete: () => void
 }
 
-function CountUpAnimation({value, suffix = ''}: {value: string; suffix?: string}) {
-  const [count, setCount] = useState(0)
-  const ref = useRef(null)
-  const isInView = useInView(ref, {once: true})
-
-  useEffect(() => {
-    if (!isInView) return
-
-    // Extract numeric value
-    const numericValue = parseFloat(value.replace(/[^0-9.]/g, ''))
-    const duration = 2000
-    const steps = 60
-    const increment = numericValue / steps
-    let current = 0
-
-    const timer = setInterval(() => {
-      current += increment
-      if (current >= numericValue) {
-        setCount(numericValue)
-        clearInterval(timer)
-      } else {
-        setCount(current)
-      }
-    }, duration / steps)
-
-    return () => clearInterval(timer)
-  }, [isInView, value])
-
-  const formatValue = (val: number) => {
-    if (value.includes('B')) return `$${val.toFixed(0)}B`
-    if (value.includes('M')) return `${val.toFixed(1)}M`
-    if (value.includes('%')) return `${val.toFixed(0)}%`
-    if (value.includes('+')) return `${val.toFixed(0)}+`
-    if (value.includes('$')) return `$${val.toFixed(0).toLocaleString()}`
-    return val.toFixed(0)
-  }
-
-  return (
-    <span ref={ref} className="text-5xl md:text-7xl font-bold text-purple-600 dark:text-purple-400">
-      {isInView ? formatValue(count) : '0'}
-      {suffix}
-    </span>
-  )
-}
-
-function DataPointCard({dataPoint, theme, index}: {dataPoint: DataPoint; theme: Theme; index: number}) {
+function FactCard({
+  fact,
+  theme,
+  index,
+  onAnswer,
+}: {
+  fact: ImmigrationFact
+  theme: Theme
+  index: number
+  onAnswer: (factId: string, answer: 'yes' | 'no') => void
+}) {
   const ref = useRef(null)
   const isInView = useInView(ref, {once: true, margin: '-100px'})
-  const Icon = dataPoint.icon
+  const [answered, setAnswered] = useState<'yes' | 'no' | null>(null)
+  const [showFeedback, setShowFeedback] = useState(false)
+
+  const handleAnswer = (answer: 'yes' | 'no') => {
+    setAnswered(answer)
+    setShowFeedback(true)
+    onAnswer(fact.id, answer)
+
+    // Hide feedback after 2 seconds
+    setTimeout(() => {
+      setShowFeedback(false)
+    }, 2000)
+  }
+
+  const lensSpecificFact = fact.lensSpecificFacts[theme]
 
   return (
     <motion.div
@@ -155,35 +90,56 @@ function DataPointCard({dataPoint, theme, index}: {dataPoint: DataPoint; theme: 
     >
       <Card className="shadow-xl hover:shadow-2xl transition-shadow">
         <CardContent className="p-8 md:p-10">
-          <div className="flex items-start gap-6 mb-6">
-            <div className="bg-purple-100 dark:bg-purple-900 p-4 rounded-full">
-              <Icon className="w-8 h-8 text-purple-600 dark:text-purple-400" />
-            </div>
-            <div className="flex-1">
-              <div className="mb-2">
-                <CountUpAnimation value={dataPoint.stat} />
+          <div className="space-y-6">
+            {/* Fact Display */}
+            <div className="p-6 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-gray-800 dark:to-gray-800 rounded-lg border-l-4 border-blue-500">
+              <div className="flex items-start gap-3 mb-4">
+                <AlertCircle className="w-6 h-6 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-1" />
+                <p className="text-lg md:text-xl text-gray-900 dark:text-gray-100 font-medium leading-relaxed">
+                  {lensSpecificFact}
+                </p>
               </div>
-              <h3 className="text-xl md:text-2xl font-bold text-gray-900 dark:text-gray-100 mb-3">
-                {dataPoint.label}
-              </h3>
-            </div>
-          </div>
-
-          <div className="space-y-4">
-            <p className="text-lg text-gray-700 dark:text-gray-300">
-              {dataPoint.explanation}
-            </p>
-
-            <div className="p-4 bg-gradient-to-r from-purple-50 to-blue-50 dark:from-gray-800 dark:to-gray-800 rounded-lg border-l-4 border-purple-500">
-              <p className="text-gray-800 dark:text-gray-200 font-medium">
-                {dataPoint.themedExplanation[theme]}
-              </p>
             </div>
 
-            <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
-              <FileText className="w-4 h-4" />
-              <span>Source: {dataPoint.source}</span>
+            {/* Answer Buttons */}
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button
+                onClick={() => handleAnswer('yes')}
+                disabled={answered !== null}
+                variant={answered === 'yes' ? 'default' : 'outline'}
+                size="lg"
+                className="flex-1 sm:flex-none px-8 py-6 text-lg font-semibold"
+              >
+                <CheckCircle className="w-5 h-5 mr-2" />
+                I Knew This
+              </Button>
+              <Button
+                onClick={() => handleAnswer('no')}
+                disabled={answered !== null}
+                variant={answered === 'no' ? 'default' : 'outline'}
+                size="lg"
+                className="flex-1 sm:flex-none px-8 py-6 text-lg font-semibold"
+              >
+                <XCircle className="w-5 h-5 mr-2" />
+                This Is New to Me
+              </Button>
             </div>
+
+            {/* Feedback Message */}
+            {showFeedback && (
+              <motion.div
+                initial={{opacity: 0, y: 10}}
+                animate={{opacity: 1, y: 0}}
+                exit={{opacity: 0}}
+                className="text-center"
+              >
+                <p className="text-green-600 dark:text-green-400 font-medium">
+                  {answered === 'yes'
+                    ? 'Great! Knowledge is power.'
+                    : 'Now you know! Keep scrolling to learn more.'}
+                </p>
+              </motion.div>
+            )}
           </div>
         </CardContent>
       </Card>
@@ -192,8 +148,23 @@ function DataPointCard({dataPoint, theme, index}: {dataPoint: DataPoint; theme: 
 }
 
 export default function DataRealityLayer({theme, onComplete}: Props) {
-  const [currentIndex, setCurrentIndex] = useState(0)
-  const allViewed = currentIndex >= DATA_POINTS.length
+  const {markDataPointViewed, recordResponse} = useJourneyStore()
+  const [answeredFacts, setAnsweredFacts] = useState<Set<string>>(new Set())
+  const allAnswered = answeredFacts.size >= IMMIGRATION_FACTS.length
+
+  const handleAnswer = (factId: string, answer: 'yes' | 'no') => {
+    // Track in journey store
+    markDataPointViewed(factId)
+    recordResponse(
+      `data-reality-${factId}`,
+      answer === 'yes' ? 'yes' : 'no',
+      0, // Time spent will be tracked separately if needed
+      0.7 // High persuasion weight for data exposure layer
+    )
+
+    // Track locally for UI state
+    setAnsweredFacts((prev) => new Set([...prev, factId]))
+  }
 
   return (
     <div className="space-y-8">
@@ -207,39 +178,55 @@ export default function DataRealityLayer({theme, onComplete}: Props) {
           Did You Know?
         </h2>
         <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-          Before we talk about solutions, let's look at the reality of wage theft in America.
+          Before we talk about solutions, let's look at some facts about immigration in America.
         </p>
       </motion.div>
 
-      {/* Data Points */}
+      {/* Immigration Facts */}
       <div className="space-y-8 mb-12">
-        {DATA_POINTS.map((dataPoint, index) => (
-          <div
-            key={dataPoint.id}
-            onMouseEnter={() => {
-              if (index > currentIndex) {
-                setCurrentIndex(index)
-              }
-            }}
-          >
-            <DataPointCard dataPoint={dataPoint} theme={theme} index={index} />
-          </div>
+        {IMMIGRATION_FACTS.map((fact, index) => (
+          <FactCard
+            key={fact.id}
+            fact={fact}
+            theme={theme}
+            index={index}
+            onAnswer={handleAnswer}
+          />
         ))}
       </div>
+
+      {/* Progress Indicator */}
+      <motion.div
+        initial={{opacity: 0}}
+        animate={{opacity: 1}}
+        className="text-center mb-8"
+      >
+        <p className="text-sm text-gray-500 dark:text-gray-400">
+          {answeredFacts.size} of {IMMIGRATION_FACTS.length} facts explored
+        </p>
+        <div className="w-full max-w-md mx-auto mt-2 h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+          <motion.div
+            className="h-full bg-blue-600 dark:bg-blue-400"
+            initial={{width: 0}}
+            animate={{width: `${(answeredFacts.size / IMMIGRATION_FACTS.length) * 100}%`}}
+            transition={{duration: 0.5}}
+          />
+        </div>
+      </motion.div>
 
       {/* Continue Button */}
       <motion.div
         initial={{opacity: 0}}
-        animate={{opacity: allViewed ? 1 : 0.5}}
+        animate={{opacity: allAnswered ? 1 : 0.5}}
         className="flex justify-center sticky bottom-8"
       >
         <Button
           onClick={onComplete}
+          disabled={!allAnswered}
           size="lg"
           className="px-12 py-6 text-xl font-bold shadow-2xl"
         >
-          Continue to Solution
-          <ArrowRight className="ml-2 w-6 h-6" />
+          {allAnswered ? 'Continue to Solution' : 'Answer all questions to continue'}
         </Button>
       </motion.div>
     </div>

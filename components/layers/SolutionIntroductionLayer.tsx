@@ -5,87 +5,90 @@ import {motion} from 'framer-motion'
 import type {Theme, Answer} from '@/types/form'
 import {Card, CardContent, CardHeader, CardTitle} from '@/components/ui/card'
 import {Button} from '@/components/ui/button'
-import {Lightbulb, CheckCircle2, XCircle, Scale, DollarSign, Users, TrendingUp} from 'lucide-react'
+import {Lightbulb, CheckCircle2, XCircle, DollarSign, Shield, GraduationCap, Target, Users} from 'lucide-react'
+import {useTheme} from '@/hooks/useTheme'
 
-interface SolutionNarrative {
-  title: string
-  story: string[]
-  themedFraming: Record<Theme, {
-    headline: string
-    benefits: string[]
-  }>
+interface SolutionComponent {
+  icon: any
+  label: string
+  description: string
 }
 
-const SOLUTION: SolutionNarrative = {
-  title: 'A Simple, Powerful Solution',
-  story: [
-    'Imagine a construction company in your community. They hire workers, promise them fair wages, then disappear without paying - leaving families struggling to pay rent and put food on the table.',
-    'This happens thousands of times every day across America. Current penalties are too weak to stop it.',
-    'But what if there was a real consequence? What if employers who steal wages had to pay a $30,000 fine for each violation?',
-    'Not a complex bureaucracy. Not years of legal battles. Just a clear, immediate consequence that makes wage theft too expensive to commit.',
-  ],
-  themedFraming: {
-    'far-left': {
-      headline: 'Real Accountability for Corporate Theft',
-      benefits: [
-        'Workers get immediate protection from exploitation',
-        'Puts teeth into labor law enforcement',
-        'Funds go directly to supporting affected communities',
-        'Shifts power back to working people',
-      ],
-    },
-    'mid-left': {
-      headline: 'Stronger Enforcement, Fairer Markets',
-      benefits: [
-        'Levels the playing field for honest businesses',
-        'Creates real deterrent against wage theft',
-        'Funds worker protection programs',
-        'Strengthens communities and local economies',
-      ],
-    },
-    'mid-right': {
-      headline: 'Defending Workers and Free Markets',
-      benefits: [
-        'Protects law-abiding businesses from unfair competition',
-        'Rewards those who play by the rules',
-        'Makes the penalty fit the crime',
-        'Restores integrity to the marketplace',
-      ],
-    },
-    'far-right': {
-      headline: 'Law and Order for American Workers',
-      benefits: [
-        'Real consequences for those who break the law',
-        'Protects American workers from exploitation',
-        'No handouts - lawbreakers pay the price',
-        'Defends the dignity of honest work',
-      ],
-    },
-  },
-}
-
-const BREAKDOWN_ITEMS = [
+const SOLUTION_COMPONENTS: SolutionComponent[] = [
   {
     icon: DollarSign,
-    label: '$30,000 Fine',
-    description: 'Per wage theft violation',
+    label: '$30,000 Fine to Self-Identify',
+    description: 'Undocumented immigrants pay a fine to come forward and begin the legalization process',
   },
   {
-    icon: Scale,
-    label: 'Clear Standard',
-    description: 'No ambiguity, no loopholes',
+    icon: Shield,
+    label: 'Deport Those with Criminal Records',
+    description: 'Anyone with a serious criminal record is deported. No exceptions',
+  },
+  {
+    icon: GraduationCap,
+    label: 'English and Civics Training',
+    description: 'Participants must learn English and pass a U.S. civics test to earn legal status',
+  },
+  {
+    icon: Target,
+    label: 'ICE Focuses on Criminals',
+    description: 'Immigration enforcement prioritizes criminals, not families',
   },
   {
     icon: Users,
-    label: 'Immediate Impact',
-    description: 'Protects workers right away',
-  },
-  {
-    icon: TrendingUp,
-    label: 'Strong Deterrent',
-    description: 'Makes theft too costly',
+    label: 'Optional Service Pathway',
+    description: 'Those who can\'t afford the fine can serve in AmeriCorps or the U.S. military to earn legal status',
   },
 ]
+
+interface ThemedFraming {
+  headline: string
+  benefits: string[]
+}
+
+const THEMED_FRAMING: Record<Theme, ThemedFraming> = {
+  'far-right': {
+    headline: 'Secure Our Border, Protect American Citizens',
+    benefits: [
+      'Criminals face immediate deportation - zero tolerance for lawbreakers',
+      'Every illegal immigrant pays a steep price ($30,000) to come forward',
+      'English and civics requirements defend American culture and values',
+      'ICE resources focused on dangerous criminals threatening our communities',
+      'Military service option ensures those who stay serve America first',
+    ],
+  },
+  'mid-right': {
+    headline: 'A Fiscally Responsible Immigration Solution',
+    benefits: [
+      'Generates $30,000 per immigrant - funds border security and enforcement',
+      'Criminal deportations reduce taxpayer burden on corrections system',
+      'English requirement improves economic productivity and integration',
+      'Efficient use of ICE resources targeting high-priority threats',
+      'Service pathway creates value while reducing financial burden',
+    ],
+  },
+  'mid-left': {
+    headline: 'Fair Accountability with Pathways to Belonging',
+    benefits: [
+      'Keeps families together while ensuring public safety through criminal deportations',
+      'Fine structure balances accountability with realistic opportunity',
+      'English and civics training strengthens community integration',
+      'Focuses enforcement on genuine threats, not productive families',
+      'Service option provides dignity and contribution for those without means',
+    ],
+  },
+  'far-left': {
+    headline: 'Transform a Broken System into Dignified Pathways',
+    benefits: [
+      'Stops mass deportations by focusing only on serious criminals',
+      'Creates accessible pathway while acknowledging fine burden through service option',
+      'Education requirements empower immigrants rather than exclude them',
+      'Redirects enforcement away from exploited workers toward exploitation',
+      'Service pathway honors contribution and builds solidarity',
+    ],
+  },
+}
 
 interface Props {
   theme: Theme
@@ -94,15 +97,16 @@ interface Props {
 }
 
 export default function SolutionIntroductionLayer({theme, onAnswer, onComplete}: Props) {
-  const [currentStoryIndex, setCurrentStoryIndex] = useState(0)
-  const [showSolution, setShowSolution] = useState(false)
+  const [currentComponentIndex, setCurrentComponentIndex] = useState(0)
+  const [showAllComponents, setShowAllComponents] = useState(false)
   const [answered, setAnswered] = useState(false)
+  const {language} = useTheme()
 
-  const handleNextStory = () => {
-    if (currentStoryIndex < SOLUTION.story.length - 1) {
-      setCurrentStoryIndex(currentStoryIndex + 1)
+  const handleNextComponent = () => {
+    if (currentComponentIndex < SOLUTION_COMPONENTS.length - 1) {
+      setCurrentComponentIndex(currentComponentIndex + 1)
     } else {
-      setShowSolution(true)
+      setShowAllComponents(true)
     }
   }
 
@@ -114,7 +118,7 @@ export default function SolutionIntroductionLayer({theme, onAnswer, onComplete}:
     }, 1000)
   }
 
-  const themedContent = SOLUTION.themedFraming[theme]
+  const themedContent = THEMED_FRAMING[theme]
 
   return (
     <div className="space-y-8">
@@ -127,15 +131,18 @@ export default function SolutionIntroductionLayer({theme, onAnswer, onComplete}:
         <div className="flex items-center justify-center gap-3 mb-4">
           <Lightbulb className="w-10 h-10 text-amber-500" />
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-100">
-            {SOLUTION.title}
+            The $30,000 Fine Pathway
           </h2>
         </div>
+        <p className="text-lg text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
+          A comprehensive solution with five core components
+        </p>
       </motion.div>
 
-      {/* Story Narrative */}
-      {!showSolution && (
+      {/* Component-by-Component Introduction */}
+      {!showAllComponents && (
         <motion.div
-          key={currentStoryIndex}
+          key={currentComponentIndex}
           initial={{opacity: 0, x: 50}}
           animate={{opacity: 1, x: 0}}
           exit={{opacity: 0, x: -50}}
@@ -143,16 +150,32 @@ export default function SolutionIntroductionLayer({theme, onAnswer, onComplete}:
         >
           <Card className="shadow-2xl">
             <CardContent className="p-8 md:p-12">
-              <p className="text-xl md:text-2xl text-gray-700 dark:text-gray-300 leading-relaxed mb-8">
-                {SOLUTION.story[currentStoryIndex]}
-              </p>
+              <div className="flex flex-col items-center text-center space-y-6">
+                {/* Icon */}
+                <div className="bg-gradient-to-br from-purple-100 to-blue-100 dark:from-purple-900 dark:to-blue-900 p-6 rounded-full">
+                  {(() => {
+                    const Icon = SOLUTION_COMPONENTS[currentComponentIndex].icon
+                    return <Icon className="w-12 h-12 text-purple-600 dark:text-purple-400" />
+                  })()}
+                </div>
 
-              <div className="flex justify-between items-center">
+                {/* Label */}
+                <h3 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-gray-100">
+                  {SOLUTION_COMPONENTS[currentComponentIndex].label}
+                </h3>
+
+                {/* Description */}
+                <p className="text-xl md:text-2xl text-gray-700 dark:text-gray-300 leading-relaxed">
+                  {SOLUTION_COMPONENTS[currentComponentIndex].description}
+                </p>
+              </div>
+
+              <div className="flex justify-between items-center mt-8">
                 <span className="text-sm text-gray-500">
-                  {currentStoryIndex + 1} of {SOLUTION.story.length}
+                  Component {currentComponentIndex + 1} of {SOLUTION_COMPONENTS.length}
                 </span>
-                <Button onClick={handleNextStory} size="lg">
-                  {currentStoryIndex < SOLUTION.story.length - 1 ? 'Continue' : 'See the Solution'}
+                <Button onClick={handleNextComponent} size="lg">
+                  {currentComponentIndex < SOLUTION_COMPONENTS.length - 1 ? 'Next Component' : 'See Full Solution'}
                 </Button>
               </div>
             </CardContent>
@@ -160,8 +183,8 @@ export default function SolutionIntroductionLayer({theme, onAnswer, onComplete}:
         </motion.div>
       )}
 
-      {/* Solution Details */}
-      {showSolution && (
+      {/* All Components Overview */}
+      {showAllComponents && (
         <motion.div
           initial={{opacity: 0, scale: 0.95}}
           animate={{opacity: 1, scale: 1}}
@@ -172,30 +195,30 @@ export default function SolutionIntroductionLayer({theme, onAnswer, onComplete}:
           <Card className="shadow-2xl bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-50 dark:from-gray-800 dark:to-gray-900">
             <CardHeader>
               <CardTitle className="text-2xl md:text-3xl text-center">
-                The $30,000 Solution
+                Five Core Components
               </CardTitle>
             </CardHeader>
             <CardContent className="p-8">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                {BREAKDOWN_ITEMS.map((item, idx) => {
-                  const Icon = item.icon
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {SOLUTION_COMPONENTS.map((component, idx) => {
+                  const Icon = component.icon
                   return (
                     <motion.div
-                      key={item.label}
+                      key={component.label}
                       initial={{opacity: 0, y: 20}}
                       animate={{opacity: 1, y: 0}}
                       transition={{delay: idx * 0.1}}
-                      className="flex items-start gap-4 p-4 bg-white dark:bg-gray-800 rounded-lg shadow"
+                      className="flex flex-col items-start gap-4 p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg"
                     >
                       <div className="bg-purple-100 dark:bg-purple-900 p-3 rounded-full">
                         <Icon className="w-6 h-6 text-purple-600 dark:text-purple-400" />
                       </div>
                       <div>
-                        <h4 className="font-bold text-gray-900 dark:text-gray-100 mb-1">
-                          {item.label}
+                        <h4 className="font-bold text-gray-900 dark:text-gray-100 mb-2">
+                          {component.label}
                         </h4>
-                        <p className="text-sm text-gray-600 dark:text-gray-400">
-                          {item.description}
+                        <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+                          {component.description}
                         </p>
                       </div>
                     </motion.div>

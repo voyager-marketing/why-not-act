@@ -1,87 +1,38 @@
 'use client'
 
-import {useState} from 'react'
-import {motion} from 'framer-motion'
+import {useState, useEffect} from 'react'
+import {motion, AnimatePresence} from 'framer-motion'
 import type {Theme, Answer} from '@/types/form'
-import {Card, CardContent, CardHeader, CardTitle} from '@/components/ui/card'
+import {Card, CardContent} from '@/components/ui/card'
 import {Button} from '@/components/ui/button'
-import {Heart, CheckCircle2, XCircle, Sparkles, Users} from 'lucide-react'
-
-interface PersonalPrompt {
-  id: string
-  question: string
-  themedNarrative: Record<Theme, string[]>
-}
-
-const REFLECTION_PROMPTS: PersonalPrompt[] = [
-  {
-    id: 'personal-connection',
-    question: 'Have you or someone you know ever been cheated out of wages?',
-    themedNarrative: {
-      'far-left': [
-        'This isn\'t just statistics - it\'s about real people and real harm.',
-        'Every worker deserves dignity, respect, and fair compensation.',
-        'When we stand together, we can create real change.',
-      ],
-      'mid-left': [
-        'Behind every number is a family struggling to make ends meet.',
-        'Strong communities are built on fairness and accountability.',
-        'Your voice can help create a better system for everyone.',
-      ],
-      'mid-right': [
-        'Hard-working Americans deserve to keep what they earn.',
-        'This is about basic fairness and the rule of law.',
-        'Together, we can protect workers and honest businesses.',
-      ],
-      'far-right': [
-        'American workers built this country and deserve respect.',
-        'No one should get away with stealing from those who work hard.',
-        'It\'s time to stand up for what\'s right.',
-      ],
-    },
-  },
-  {
-    id: 'future-vision',
-    question: 'Can you imagine a world where wage theft is rare because the consequences are real?',
-    themedNarrative: {
-      'far-left': [
-        'A world where workers have real power and protection.',
-        'Where corporations can\'t exploit people without consequences.',
-        'Where justice isn\'t just for those who can afford it.',
-      ],
-      'mid-left': [
-        'A fairer economy where everyone plays by the same rules.',
-        'Where families can count on receiving the wages they earned.',
-        'Where honest businesses thrive without unfair competition.',
-      ],
-      'mid-right': [
-        'A market that rewards those who do the right thing.',
-        'Where the law actually protects American workers.',
-        'Where integrity matters more than cutting corners.',
-      ],
-      'far-right': [
-        'A nation that defends its workers from exploitation.',
-        'Where lawbreakers face real consequences.',
-        'Where American values of hard work are respected.',
-      ],
-    },
-  },
-]
+import {Heart, Sparkles, ArrowRight} from 'lucide-react'
 
 interface JourneySummary {
   totalAnswers: number
   yesCount: number
   maybeCount: number
   noCount: number
+  persuasionScore: number
 }
 
 function calculateSummary(answers: Record<string, Answer>): JourneySummary {
   const values = Object.values(answers)
+  const totalAnswers = values.length
+  const yesCount = values.filter((a) => a === 'yes').length
+  const maybeCount = values.filter((a) => a === 'maybe').length
+  const noCount = values.filter((a) => a === 'no').length
+
+  // Calculate persuasion score (yes = 2 points, maybe = 1 point, no = 0 points)
+  const persuasionScore = totalAnswers > 0
+    ? Math.round(((yesCount * 2 + maybeCount) / (totalAnswers * 2)) * 100)
+    : 0
+
   return {
-    totalAnswers: values.length,
-    yesCount: values.filter((a) => a === 'yes').length,
-    maybeCount: values.filter((a) => a === 'maybe').length,
-    noCount: values.filter((a) => a === 'no').length,
+    totalAnswers,
+    yesCount,
+    maybeCount,
+    noCount,
+    persuasionScore,
   }
 }
 
@@ -98,190 +49,218 @@ export default function ReflectionPersuasionLayer({
   onAnswer,
   onComplete,
 }: Props) {
-  const [currentPromptIndex, setCurrentPromptIndex] = useState(0)
-  const [showSummary, setShowSummary] = useState(true)
-  const [promptAnswers, setPromptAnswers] = useState<Record<string, Answer>>({})
-
-  const currentPrompt = REFLECTION_PROMPTS[currentPromptIndex]
-  const allAnswered = Object.keys(promptAnswers).length === REFLECTION_PROMPTS.length
+  const [showNarrative, setShowNarrative] = useState(false)
+  const [readyForAction, setReadyForAction] = useState(false)
   const summary = calculateSummary(answers)
 
-  const handleAnswer = (answer: Answer) => {
-    const newAnswers = {...promptAnswers, [currentPrompt.id]: answer}
-    setPromptAnswers(newAnswers)
-    onAnswer(answer)
+  useEffect(() => {
+    // Delay narrative appearance for dramatic effect
+    const timer = setTimeout(() => {
+      setShowNarrative(true)
+    }, 800)
 
-    if (currentPromptIndex < REFLECTION_PROMPTS.length - 1) {
-      setTimeout(() => {
-        setShowSummary(false)
-        setCurrentPromptIndex(currentPromptIndex + 1)
-        setTimeout(() => setShowSummary(true), 100)
-      }, 500)
-    } else {
-      setTimeout(() => {
-        onComplete()
-      }, 1000)
-    }
+    return () => clearTimeout(timer)
+  }, [])
+
+  const handleReadyForAction = () => {
+    setReadyForAction(true)
+    setTimeout(() => {
+      onComplete()
+    }, 500)
   }
 
   return (
-    <div className="space-y-8">
-      {/* Header */}
+    <div className="space-y-8 max-w-4xl mx-auto px-4">
+      {/* Journey Summary Header */}
       <motion.div
         initial={{opacity: 0, y: -20}}
         animate={{opacity: 1, y: 0}}
-        className="text-center mb-12"
+        transition={{duration: 0.6}}
+        className="text-center mb-8"
       >
-        <div className="flex items-center justify-center gap-3 mb-4">
-          <Heart className="w-10 h-10 text-pink-500" />
+        <div className="flex items-center justify-center gap-3 mb-6">
+          <Heart className="w-10 h-10 text-pink-500 animate-pulse" />
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-100">
-            Your Journey So Far
+            A Moment of Reflection
           </h2>
         </div>
-        <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-          Let's reflect on what we've discovered together.
-        </p>
       </motion.div>
 
-      {/* Journey Summary */}
+      {/* Journey Stats Card */}
       <motion.div
         initial={{opacity: 0, scale: 0.95}}
         animate={{opacity: 1, scale: 1}}
-        className="mb-12"
+        transition={{duration: 0.6, delay: 0.2}}
       >
-        <Card className="shadow-xl bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-50 dark:from-gray-800 dark:to-gray-900">
+        <Card className="shadow-xl bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-50 dark:from-gray-800 dark:to-gray-900 border-2 border-purple-200 dark:border-purple-800">
           <CardContent className="p-8">
             <div className="flex items-center gap-3 mb-6">
               <Sparkles className="w-8 h-8 text-purple-600" />
               <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-                You've Been Engaged
+                Your Journey
               </h3>
             </div>
 
-            <div className="grid grid-cols-3 gap-6 mb-6">
-              <div className="text-center p-4 bg-white dark:bg-gray-800 rounded-lg">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+              <div className="text-center p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
+                <div className="text-3xl font-bold text-purple-600 mb-1">
+                  {summary.totalAnswers}
+                </div>
+                <div className="text-sm text-gray-600 dark:text-gray-400">Questions</div>
+              </div>
+              <div className="text-center p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
                 <div className="text-3xl font-bold text-green-600 mb-1">
                   {summary.yesCount}
                 </div>
                 <div className="text-sm text-gray-600 dark:text-gray-400">Yes</div>
               </div>
-              <div className="text-center p-4 bg-white dark:bg-gray-800 rounded-lg">
+              <div className="text-center p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
                 <div className="text-3xl font-bold text-yellow-600 mb-1">
                   {summary.maybeCount}
                 </div>
                 <div className="text-sm text-gray-600 dark:text-gray-400">Maybe</div>
               </div>
-              <div className="text-center p-4 bg-white dark:bg-gray-800 rounded-lg">
-                <div className="text-3xl font-bold text-red-600 mb-1">
-                  {summary.noCount}
+              <div className="text-center p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
+                <div className="text-3xl font-bold text-blue-600 mb-1">
+                  {summary.persuasionScore}%
                 </div>
-                <div className="text-sm text-gray-600 dark:text-gray-400">No</div>
+                <div className="text-sm text-gray-600 dark:text-gray-400">Engagement</div>
               </div>
             </div>
 
             <p className="text-center text-gray-700 dark:text-gray-300 text-lg">
-              You've engaged with {summary.totalAnswers} questions on this journey.
               Thank you for taking the time to consider this important issue.
             </p>
           </CardContent>
         </Card>
       </motion.div>
 
-      {/* Emotional Prompt */}
-      {!allAnswered && showSummary && (
-        <motion.div
-          key={currentPrompt.id}
-          initial={{opacity: 0, x: 50}}
-          animate={{opacity: 1, x: 0}}
-          exit={{opacity: 0, x: -50}}
-          transition={{duration: 0.5}}
-        >
-          <Card className="shadow-2xl">
-            <CardHeader className="bg-gradient-to-r from-purple-50 to-blue-50 dark:from-gray-800 dark:to-gray-800">
-              <CardTitle className="text-2xl md:text-3xl leading-tight">
-                {currentPrompt.question}
-              </CardTitle>
-            </CardHeader>
+      {/* Universal Bipartisan Narrative */}
+      <AnimatePresence>
+        {showNarrative && (
+          <motion.div
+            initial={{opacity: 0, y: 30}}
+            animate={{opacity: 1, y: 0}}
+            transition={{duration: 0.8, delay: 0.4}}
+          >
+            <Card className="shadow-2xl border-2 border-blue-200 dark:border-blue-800">
+              <CardContent className="p-8 md:p-12 space-y-6">
+                {/* Opening Statement */}
+                <motion.h3
+                  initial={{opacity: 0}}
+                  animate={{opacity: 1}}
+                  transition={{delay: 0.6}}
+                  className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-gray-100 text-center leading-tight"
+                >
+                  Our immigration system is broken because we've stopped listening to each other.
+                </motion.h3>
 
-            <CardContent className="p-8 md:p-10">
-              {/* Themed Narrative */}
-              <div className="space-y-4 mb-8">
-                {currentPrompt.themedNarrative[theme].map((paragraph, idx) => (
-                  <motion.p
-                    key={idx}
-                    initial={{opacity: 0, y: 10}}
-                    animate={{opacity: 1, y: 0}}
-                    transition={{delay: idx * 0.2}}
-                    className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed"
-                  >
-                    {paragraph}
-                  </motion.p>
-                ))}
-              </div>
+                <motion.p
+                  initial={{opacity: 0}}
+                  animate={{opacity: 1}}
+                  transition={{delay: 0.8}}
+                  className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed"
+                >
+                  This idea doesn't belong to the far-right or the far-left. It doesn't fit neatly into Republican or Democratic talking points. That's exactly why it might work.
+                </motion.p>
 
-              {/* Personal Connection */}
-              <div className="p-6 bg-gradient-to-r from-pink-50 to-purple-50 dark:from-pink-900/20 dark:to-purple-900/20 rounded-lg border-l-4 border-pink-500 mb-8">
-                <div className="flex items-start gap-3">
-                  <Users className="w-6 h-6 text-pink-600 flex-shrink-0 mt-1" />
-                  <p className="text-gray-800 dark:text-gray-200 font-medium">
-                    Real change happens when people like you decide to act. Your voice matters.
+                {/* Conservative Perspective */}
+                <motion.div
+                  initial={{opacity: 0, x: -20}}
+                  animate={{opacity: 1, x: 0}}
+                  transition={{delay: 1.0}}
+                  className="p-6 bg-gradient-to-r from-red-50 to-pink-50 dark:from-red-900/20 dark:to-pink-900/20 rounded-lg border-l-4 border-red-500"
+                >
+                  <p className="text-gray-800 dark:text-gray-200 font-semibold mb-2">
+                    If you lean conservative
                   </p>
-                </div>
-              </div>
+                  <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+                    This plan ensures consequences, accountability, and billions in funding for border security. It's not amnesty—it's enforcement with a price tag.
+                  </p>
+                </motion.div>
 
-              {/* Answer Buttons */}
-              <div className="space-y-3">
-                <p className="text-center text-gray-600 dark:text-gray-400 mb-4">
-                  Would you help make this change happen?
-                </p>
-                <div className="grid grid-cols-2 gap-6">
-                  <motion.div whileHover={{scale: 1.02}} whileTap={{scale: 0.98}}>
-                    <Button
-                      onClick={() => handleAnswer('yes')}
-                      size="lg"
-                      className="w-full h-24 flex flex-col gap-2 bg-green-500 hover:bg-green-600 text-white"
-                    >
-                      <CheckCircle2 className="w-12 h-12" />
-                      <span className="text-xl font-bold">Yes, I Would Help</span>
-                    </Button>
-                  </motion.div>
+                {/* Progressive Perspective */}
+                <motion.div
+                  initial={{opacity: 0, x: 20}}
+                  animate={{opacity: 1, x: 0}}
+                  transition={{delay: 1.2}}
+                  className="p-6 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-lg border-l-4 border-blue-500"
+                >
+                  <p className="text-gray-800 dark:text-gray-200 font-semibold mb-2">
+                    If you lean progressive
+                  </p>
+                  <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+                    This plan keeps families together, grows the economy, and treats people with dignity. It's not mass deportation—it's a pathway that respects both the rule of law and human rights.
+                  </p>
+                </motion.div>
 
-                  <motion.div whileHover={{scale: 1.02}} whileTap={{scale: 0.98}}>
-                    <Button
-                      onClick={() => handleAnswer('no')}
-                      size="lg"
-                      className="w-full h-24 flex flex-col gap-2 bg-gray-500 hover:bg-gray-600 text-white"
-                    >
-                      <XCircle className="w-12 h-12" />
-                      <span className="text-xl font-bold">Not Sure Yet</span>
-                    </Button>
-                  </motion.div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </motion.div>
-      )}
+                {/* The Truth Section */}
+                <motion.div
+                  initial={{opacity: 0, y: 20}}
+                  animate={{opacity: 1, y: 0}}
+                  transition={{delay: 1.4}}
+                  className="p-6 bg-gradient-to-r from-purple-50 to-indigo-50 dark:from-purple-900/20 dark:to-indigo-900/20 rounded-lg border-2 border-purple-300 dark:border-purple-700"
+                >
+                  <p className="text-gray-800 dark:text-gray-200 font-bold text-xl mb-3">
+                    Here's the truth:
+                  </p>
+                  <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-3">
+                    Most Americans—regardless of politics—want a solution that's tough, fair, and realistic. We want border security AND compassion. We want rule of law AND economic growth.
+                  </p>
+                  <p className="text-gray-800 dark:text-gray-200 font-semibold text-lg">
+                    The $30,000 fine plan gives us both.
+                  </p>
+                </motion.div>
 
-      {/* Completion Message */}
-      {allAnswered && (
-        <motion.div
-          initial={{opacity: 0, scale: 0.9}}
-          animate={{opacity: 1, scale: 1}}
-        >
-          <Card className="shadow-2xl bg-gradient-to-r from-purple-100 to-blue-100 dark:from-purple-900 dark:to-blue-900">
-            <CardContent className="p-12 text-center">
-              <CheckCircle2 className="w-16 h-16 text-green-600 mx-auto mb-4" />
-              <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">
-                Thank You for Your Thoughtfulness
-              </h3>
-              <p className="text-lg text-gray-700 dark:text-gray-300 mb-6">
-                You've completed this journey of understanding. Now let's talk about what you can do next.
-              </p>
-            </CardContent>
-          </Card>
-        </motion.div>
-      )}
+                {/* Closing Question */}
+                <motion.div
+                  initial={{opacity: 0}}
+                  animate={{opacity: 1}}
+                  transition={{delay: 1.6}}
+                  className="pt-6 space-y-4"
+                >
+                  <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
+                    The question isn't whether you agree with every detail. The question is: Are you tired of decades of political gridlock? Are you ready to try something new?
+                  </p>
+                </motion.div>
+
+                {/* Call to Action */}
+                <motion.div
+                  initial={{opacity: 0, scale: 0.95}}
+                  animate={{opacity: 1, scale: 1}}
+                  transition={{delay: 1.8}}
+                  className="pt-8"
+                >
+                  <div className="text-center mb-6">
+                    <p className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-2">
+                      Are you ready to take action?
+                    </p>
+                    <p className="text-gray-600 dark:text-gray-400">
+                      Let's explore what you can do next.
+                    </p>
+                  </div>
+
+                  <Button
+                    onClick={handleReadyForAction}
+                    size="lg"
+                    disabled={readyForAction}
+                    className="w-full h-16 text-xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white shadow-lg hover:shadow-xl transition-all duration-300"
+                  >
+                    {readyForAction ? (
+                      <span>Loading...</span>
+                    ) : (
+                      <>
+                        <span>I'm Ready</span>
+                        <ArrowRight className="w-6 h-6 ml-2" />
+                      </>
+                    )}
+                  </Button>
+                </motion.div>
+              </CardContent>
+            </Card>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   )
 }

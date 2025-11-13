@@ -10,39 +10,35 @@ import {Progress} from '@/components/ui/progress'
 
 interface ValueQuestion {
   id: string
-  text: string
-  themedFraming: Record<Theme, string>
+  text: Record<Theme, string>
 }
 
 const VALUE_QUESTIONS: ValueQuestion[] = [
   {
-    id: 'fair-compensation',
-    text: 'Should workers be fairly compensated for their labor?',
-    themedFraming: {
-      'far-left': 'Workers deserve dignity and fair wages - not exploitation by corporate greed.',
-      'mid-left': 'Fair compensation creates a stronger economy and healthier communities.',
-      'mid-right': 'People who work hard should be rewarded - that\'s the American way.',
-      'far-right': 'Those who contribute to society deserve to keep what they earn without government interference.',
+    id: 'immigration-q1',
+    text: {
+      'far-right': 'Do you believe that people who break our immigration laws should face real consequences?',
+      'mid-right': 'Should undocumented immigrants be required to pay a significant fine if they want to stay in the U.S. legally?',
+      'mid-left': 'Should families who have been in the U.S. for years, working and contributing to their communities, have a chance to earn legal status?',
+      'far-left': 'Do you believe that all people, regardless of immigration status, deserve to be treated with dignity and respect?',
     },
   },
   {
-    id: 'rule-of-law',
-    text: 'Should there be consequences when companies break the law?',
-    themedFraming: {
-      'far-left': 'Corporations must be held accountable when they exploit workers and communities.',
-      'mid-left': 'A fair system requires enforcement of labor protections for everyone.',
-      'mid-right': 'The rule of law matters - even for big businesses.',
-      'far-right': 'No one should be above the law. Lawbreakers must face real consequences.',
+    id: 'immigration-q2',
+    text: {
+      'far-right': 'Should we prioritize deporting undocumented immigrants with criminal records before focusing on families who have been here for years?',
+      'mid-right': 'Do you believe immigrants should learn English and understand U.S. civics before gaining legal status?',
+      'mid-left': 'Do you think deporting millions of people who are otherwise law-abiding would harm local economies and communities?',
+      'far-left': 'Should we create pathways for undocumented immigrants to gain legal status without punitive measures that separate families?',
     },
   },
   {
-    id: 'community-protection',
-    text: 'Should we protect American communities from exploitation?',
-    themedFraming: {
-      'far-left': 'We must defend vulnerable communities from predatory business practices.',
-      'mid-left': 'Strong communities are built on protecting workers and their families.',
-      'mid-right': 'American towns and families deserve protection from exploitation.',
-      'far-right': 'Our communities and sovereignty must be defended from those who take advantage.',
+    id: 'immigration-q3',
+    text: {
+      'far-right': 'Do you think it\'s fair that undocumented immigrants can live here without following the same rules citizens and legal immigrants follow?',
+      'mid-right': 'Should any path to legal status require immigrants to contribute financially—like paying back taxes or funding border security?',
+      'mid-left': 'Should we create a system that allows undocumented immigrants to come forward, get right with the law, and stay legally?',
+      'far-left': 'Do you think immigrants contribute positively to our economy and communities?',
     },
   },
 ]
@@ -162,18 +158,11 @@ export default function ValueAlignmentLayer({
                 Question {currentQuestionIndex + 1} of {VALUE_QUESTIONS.length}
               </div>
               <CardTitle className="text-2xl md:text-3xl leading-tight">
-                {currentQuestion.text}
+                {currentQuestion.text[theme]}
               </CardTitle>
             </CardHeader>
 
             <CardContent className="p-6 md:p-8">
-              {/* Themed Framing */}
-              <div className="mb-8 p-4 bg-gray-50 dark:bg-gray-900 rounded-lg border-l-4 border-purple-500">
-                <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
-                  {currentQuestion.themedFraming[theme]}
-                </p>
-              </div>
-
               {/* Large Yes/No Buttons */}
               <div className="grid grid-cols-2 gap-6">
                 <motion.div
