@@ -115,10 +115,8 @@ export default function CallToActionLayer({theme, persuasionScore}: Props) {
   const [emailSubmitted, setEmailSubmitted] = useState(false)
   const [selectedAction, setSelectedAction] = useState<string | null>(null)
 
-  // Filter and sort actions based on persuasion score
-  const availableActions = ACTIONS.filter((action) => persuasionScore >= action.minScore).sort(
-    (a, b) => a.priority - b.priority
-  )
+  // Show all actions, sorted by priority
+  const availableActions = ACTIONS.sort((a, b) => a.priority - b.priority)
 
   const handleEmailSubmit = (e: React.FormEvent) => {
     e.preventDefault()

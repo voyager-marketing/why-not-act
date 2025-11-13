@@ -86,54 +86,6 @@ export default function ReflectionPersuasionLayer({
         </div>
       </motion.div>
 
-      {/* Journey Stats Card */}
-      <motion.div
-        initial={{opacity: 0, scale: 0.95}}
-        animate={{opacity: 1, scale: 1}}
-        transition={{duration: 0.6, delay: 0.2}}
-      >
-        <Card className="shadow-xl bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-50 dark:from-gray-800 dark:to-gray-900 border-2 border-purple-200 dark:border-purple-800">
-          <CardContent className="p-8">
-            <div className="flex items-center gap-3 mb-6">
-              <Sparkles className="w-8 h-8 text-purple-600" />
-              <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-                Your Journey
-              </h3>
-            </div>
-
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-              <div className="text-center p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
-                <div className="text-3xl font-bold text-purple-600 mb-1">
-                  {summary.totalAnswers}
-                </div>
-                <div className="text-sm text-gray-600 dark:text-gray-400">Questions</div>
-              </div>
-              <div className="text-center p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
-                <div className="text-3xl font-bold text-green-600 mb-1">
-                  {summary.yesCount}
-                </div>
-                <div className="text-sm text-gray-600 dark:text-gray-400">Yes</div>
-              </div>
-              <div className="text-center p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
-                <div className="text-3xl font-bold text-yellow-600 mb-1">
-                  {summary.maybeCount}
-                </div>
-                <div className="text-sm text-gray-600 dark:text-gray-400">Maybe</div>
-              </div>
-              <div className="text-center p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
-                <div className="text-3xl font-bold text-blue-600 mb-1">
-                  {summary.persuasionScore}%
-                </div>
-                <div className="text-sm text-gray-600 dark:text-gray-400">Engagement</div>
-              </div>
-            </div>
-
-            <p className="text-center text-gray-700 dark:text-gray-300 text-lg">
-              Thank you for taking the time to consider this important issue.
-            </p>
-          </CardContent>
-        </Card>
-      </motion.div>
 
       {/* Universal Bipartisan Narrative */}
       <AnimatePresence>
