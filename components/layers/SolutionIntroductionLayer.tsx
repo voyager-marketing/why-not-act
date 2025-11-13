@@ -131,7 +131,7 @@ export default function SolutionIntroductionLayer({theme, onAnswer, onComplete}:
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 max-w-5xl mx-auto px-4">
       {/* Stage 1: Universal Explanation */}
       {stage === 1 && (
         <motion.div
