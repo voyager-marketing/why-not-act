@@ -23,6 +23,7 @@ export function PoliticalLensQuiz() {
   const router = useRouter()
   const setTheme = useFormStore((state) => state.setTheme)
   const [selectedLens, setSelectedLens] = useState<Theme | null>(null)
+  const [selectedSystem, setSelectedSystem] = useState<'legacy' | 'layered' | null>(null)
   const [isTransitioning, setIsTransitioning] = useState(false)
 
   const options: LensOption[] = [
@@ -68,16 +69,26 @@ export function PoliticalLensQuiz() {
     },
   ]
 
-  const handleSelect = async (lens: Theme) => {
+  const handleLensSelect = (lens: Theme) => {
     setSelectedLens(lens)
-    setIsTransitioning(true)
-
-    // Set the theme in the store
     setTheme(lens)
+  }
+
+  const handleSystemSelect = async (system: 'legacy' | 'layered') => {
+    if (!selectedLens) return
+
+    setSelectedSystem(system)
+    setIsTransitioning(true)
 
     // Wait for animation to complete before navigating
     await new Promise((resolve) => setTimeout(resolve, 800))
-    router.push(`/form/${lens}`)
+
+    // Route based on selected system
+    if (system === 'legacy') {
+      router.push(`/form/${selectedLens}`)
+    } else {
+      router.push(`/journey/${selectedLens}`)
+    }
   }
 
   return (
@@ -116,7 +127,7 @@ export function PoliticalLensQuiz() {
                   whileTap={!isTransitioning ? {scale: 0.98} : {}}
                 >
                   <Card
-                    onClick={() => !isTransitioning && handleSelect(option.id)}
+                    onClick={() => !isTransitioning && handleLensSelect(option.id)}
                     className={`
                       relative cursor-pointer p-6 border-2 transition-all duration-300
                       ${isSelected ? 'ring-4 ring-purple-500/50 border-purple-500' : option.borderColor}
@@ -130,7 +141,7 @@ export function PoliticalLensQuiz() {
                     onKeyDown={(e) => {
                       if (e.key === 'Enter' || e.key === ' ') {
                         e.preventDefault()
-                        !isTransitioning && handleSelect(option.id)
+                        !isTransitioning && handleLensSelect(option.id)
                       }
                     }}
                   >
@@ -176,17 +187,100 @@ export function PoliticalLensQuiz() {
           </AnimatePresence>
         </div>
 
+        {/* System Selection - Shows after lens is selected */}
+        <AnimatePresence>
+          {selectedLens && !isTransitioning && (
+            <motion.div
+              initial={{opacity: 0, y: 20}}
+              animate={{opacity: 1, y: 0}}
+              exit={{opacity: 0, y: -20}}
+              transition={{duration: 0.5}}
+              className="mt-12 pt-8 border-t border-gray-200 dark:border-gray-700"
+            >
+              <div className="text-center mb-6">
+                <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+                  Choose Your Experience
+                </h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  We have two versions available for testing
+                </p>
+              </div>
+
+              <div className="grid md:grid-cols-2 gap-4 max-w-3xl mx-auto">
+                {/* Legacy System */}
+                <Card
+                  onClick={() => handleSystemSelect('legacy')}
+                  className="cursor-pointer p-6 border-2 border-gray-200 hover:border-purple-400 hover:shadow-lg transition-all duration-300"
+                  role="button"
+                  tabIndex={0}
+                >
+                  <div className="text-center">
+                    <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gray-100 text-gray-600 mb-4">
+                      <span className="text-2xl">📋</span>
+                    </div>
+                    <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+                      Classic Quiz
+                    </h4>
+                    <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
+                      Simple 5-question format with immediate results
+                    </p>
+                    <div className="text-xs text-gray-500 space-y-1">
+                      <div>✓ Quick completion (2-3 min)</div>
+                      <div>✓ Straightforward scoring</div>
+                      <div>✓ Original experience</div>
+                    </div>
+                  </div>
+                </Card>
+
+                {/* New Layered System */}
+                <Card
+                  onClick={() => handleSystemSelect('layered')}
+                  className="cursor-pointer p-6 border-2 border-purple-300 hover:border-purple-500 hover:shadow-xl transition-all duration-300 bg-gradient-to-br from-purple-50 to-blue-50"
+                  role="button"
+                  tabIndex={0}
+                >
+                  <div className="text-center">
+                    <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-purple-100 text-purple-600 mb-4">
+                      <span className="text-2xl">🎯</span>
+                    </div>
+                    <div className="inline-block px-2 py-1 bg-purple-600 text-white text-xs font-semibold rounded-full mb-2">
+                      NEW
+                    </div>
+                    <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+                      7-Layer Journey
+                    </h4>
+                    <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
+                      Deep engagement with progressive persuasion layers
+                    </p>
+                    <div className="text-xs text-gray-500 space-y-1">
+                      <div>✓ Multi-dimensional scoring</div>
+                      <div>✓ Data-driven insights</div>
+                      <div>✓ Personalized narrative</div>
+                    </div>
+                  </div>
+                </Card>
+              </div>
+
+              <p className="text-center text-xs text-gray-500 dark:text-gray-400 mt-6">
+                Both experiences use your selected perspective: <span className="font-semibold capitalize">{selectedLens.replace('-', ' ')}</span>
+              </p>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
         {/* Helper Text */}
-        <motion.div
-          initial={{opacity: 0}}
-          animate={{opacity: 1}}
-          transition={{duration: 0.6, delay: 0.5}}
-          className="text-center mt-8"
-        >
-          <p className="text-sm text-gray-500 dark:text-gray-400">
-            Your selection helps us frame questions in a way that resonates with your values
-          </p>
-        </motion.div>
+        {!selectedLens && (
+          <motion.div
+            initial={{opacity: 0}}
+            animate={{opacity: 1}}
+            transition={{duration: 0.6, delay: 0.5}}
+            className="text-center mt-8"
+          >
+            <p className="text-sm text-gray-500 dark:text-gray-400">
+              Your selection helps us frame questions in a way that resonates with your values
+            </p>
+          </motion.div>
+        )}
       </div>
     </section>
   )
