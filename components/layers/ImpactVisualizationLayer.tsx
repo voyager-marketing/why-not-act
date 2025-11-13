@@ -224,13 +224,29 @@ export default function ImpactVisualizationLayer({onComplete}: Props) {
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowReflection(true)
-    }, 2000) // Show after 2 seconds to allow impacts to be seen
+    }, 3500) // Show after 3.5 seconds to allow all impacts to animate in
 
     return () => clearTimeout(timer)
   }, [])
 
+  // Also show reflection when user scrolls near the bottom
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollPosition = window.scrollY + window.innerHeight
+      const documentHeight = document.documentElement.scrollHeight
+
+      // Show reflection when user scrolls past 60% of the page
+      if (scrollPosition > documentHeight * 0.6) {
+        setShowReflection(true)
+      }
+    }
+
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
   return (
-    <div className="max-w-4xl mx-auto space-y-8">
+    <div className="max-w-4xl mx-auto space-y-8 px-4 pb-24">
       {/* Stage 1: Universal Intro */}
       <motion.div
         initial={{opacity: 0, y: -20}}
