@@ -4,6 +4,7 @@ import {questionType} from './question'
 // New multi-layered system schemas
 import {layeredQuestionType} from './layeredQuestion'
 import {dataPointType} from './dataPoint'
+import {impactPointType} from './impactPoint'
 import {callToActionType} from './callToAction'
 
 // User engagement schemas
@@ -18,6 +19,7 @@ export const schemaTypes = [
   // New multi-layered system
   layeredQuestionType,
   dataPointType,
+  impactPointType,
   callToActionType,
 
   // User engagement

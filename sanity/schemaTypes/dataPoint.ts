@@ -2,9 +2,9 @@ import {defineType, defineField} from 'sanity'
 
 export const dataPointType = defineType({
   name: 'dataPoint',
-  title: 'Data Point',
+  title: 'Did You Know?',
   type: 'document',
-  description: 'Immigration facts with ideology-specific interpretations',
+  description: 'Immigration facts with ideology-specific interpretations for Layer 3',
   fields: [
     defineField({
       name: 'category',

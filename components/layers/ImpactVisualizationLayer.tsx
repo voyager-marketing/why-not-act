@@ -5,8 +5,10 @@ import {motion, useInView} from 'framer-motion'
 import type {PoliticalLens} from '@/lib/journeyStore'
 import {Card, CardContent} from '@/components/ui/card'
 import {Button} from '@/components/ui/button'
-import {ArrowRight} from 'lucide-react'
+import {ArrowRight, Loader2} from 'lucide-react'
 import {useJourneyStore} from '@/lib/journeyStore'
+import {client} from '@/lib/sanity.client'
+import type {ImpactPoint} from '@/types/sanity'
 
 interface Props {
   onComplete: () => void
@@ -24,7 +26,34 @@ interface LensImpacts {
   reflectionQuestion: string
 }
 
-const LENS_IMPACTS: LensImpacts[] = [
+// Fetch impact points from Sanity
+const fetchImpactPoints = async (lens: PoliticalLens): Promise<LensImpacts | null> => {
+  const query = `*[_type == "impactPoint" && lens == $lens] | order(order asc) {
+    _id,
+    emoji,
+    title,
+    description,
+    reflectionQuestion,
+    order
+  }`
+
+  const impactPoints: ImpactPoint[] = await client.fetch(query, {lens})
+
+  if (impactPoints.length === 0) return null
+
+  return {
+    lens,
+    impacts: impactPoints.map((ip) => ({
+      emoji: ip.emoji,
+      title: ip.title,
+      description: ip.description,
+    })),
+    reflectionQuestion: impactPoints.find((ip) => ip.reflectionQuestion)?.reflectionQuestion || '',
+  }
+}
+
+// Fallback data (will be replaced by Sanity)
+const LENS_IMPACTS_FALLBACK: LensImpacts[] = [
   {
     lens: 'center-right',
     impacts: [
@@ -188,18 +217,60 @@ function ImpactCard({impact, index}: ImpactCardProps) {
 export default function ImpactVisualizationLayer({onComplete}: Props) {
   const {politicalLens, markDataPointViewed, recordResponse} = useJourneyStore()
   const [reflectionResponse, setReflectionResponse] = useState<'yes' | 'maybe' | null>(null)
-  const reflectionRef = useRef(null)
-  const isReflectionInView = useInView(reflectionRef, {once: true})
+  const [lensImpacts, setLensImpacts] = useState<LensImpacts | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
-  // Get impacts for current lens
-  const lensImpacts = LENS_IMPACTS.find((li) => li.lens === politicalLens)
+  // Fetch impacts from Sanity on mount or when lens changes
+  useEffect(() => {
+    if (!politicalLens) return
 
-  // If no lens is selected, show generic message
+    const loadImpacts = async () => {
+      setIsLoading(true)
+      setError(null)
+      try {
+        const impacts = await fetchImpactPoints(politicalLens)
+        if (impacts) {
+          setLensImpacts(impacts)
+        } else {
+          // Fallback to hardcoded data if no Sanity data
+          const fallback = LENS_IMPACTS_FALLBACK.find((li) => li.lens === politicalLens)
+          setLensImpacts(fallback || null)
+        }
+      } catch (err) {
+        console.error('Error fetching impact points:', err)
+        setError('Failed to load impact data')
+        // Fallback to hardcoded data on error
+        const fallback = LENS_IMPACTS_FALLBACK.find((li) => li.lens === politicalLens)
+        setLensImpacts(fallback || null)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    loadImpacts()
+  }, [politicalLens])
+
+  // Loading state
+  if (isLoading) {
+    return (
+      <div className="max-w-4xl mx-auto">
+        <Card className="shadow-2xl">
+          <CardContent className="p-12 flex flex-col items-center justify-center gap-4">
+            <Loader2 className="w-12 h-12 text-purple-600 animate-spin" />
+            <p className="text-gray-600 dark:text-gray-400">Loading impact data...</p>
+          </CardContent>
+        </Card>
+      </div>
+    )
+  }
+
+  // If no lens is selected or no data found
   if (!lensImpacts) {
     return (
       <div className="text-center py-12">
         <p className="text-xl text-gray-600 dark:text-gray-400">
-          Please complete the political lens quiz first.
+          {error || 'Please complete the political lens quiz first.'}
         </p>
       </div>
     )
@@ -245,10 +316,9 @@ export default function ImpactVisualizationLayer({onComplete}: Props) {
 
       {/* Reflection Question - Always visible */}
       <motion.div
-        ref={reflectionRef}
         initial={{opacity: 0, y: 30}}
-        animate={isReflectionInView ? {opacity: 1, y: 0} : {opacity: 0, y: 30}}
-        transition={{duration: 0.6}}
+        animate={{opacity: 1, y: 0}}
+        transition={{duration: 0.6, delay: 0.6}}
         className="mb-12"
       >
           <Card className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-gray-800 dark:to-gray-800 shadow-xl">

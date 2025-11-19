@@ -250,12 +250,12 @@ const themeData: Array<{
     description: 'Security and tradition focused',
   },
   {
-    value: 'mid-right',
+    value: 'center-right',
     label: 'Center Right',
     description: 'Market and opportunity focused',
   },
   {
-    value: 'mid-left',
+    value: 'center-left',
     label: 'Center Left',
     description: 'Community and support focused',
   },

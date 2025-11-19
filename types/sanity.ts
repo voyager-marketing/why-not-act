@@ -77,6 +77,22 @@ export interface DataPoint {
 }
 
 // ============================================================================
+// Impact Points (Layer 5)
+// ============================================================================
+
+export interface ImpactPoint {
+  _id: string
+  _type: 'impactPoint'
+  lens: 'far-left' | 'center-left' | 'center-right' | 'far-right'
+  order: number
+  emoji: string
+  title: string
+  description: string
+  reflectionQuestion?: string
+  tags?: string[]
+}
+
+// ============================================================================
 // Layered Questions
 // ============================================================================
 

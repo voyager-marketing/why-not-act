@@ -35,7 +35,7 @@ const ACTIONS: ActionCard[] = [
     id: 'email-signup',
     icon: Mail,
     title: 'Stay Informed',
-    description: 'Get updates on wage theft legislation and how you can help.',
+    description: 'Get updates on immigration reform legislation and how you can help.',
     priority: 1,
     minScore: 0,
     buttonText: 'Join the Movement',
@@ -46,7 +46,7 @@ const ACTIONS: ActionCard[] = [
     id: 'share',
     icon: Share2,
     title: 'Share This Journey',
-    description: 'Help others understand the impact of wage theft and the solution.',
+    description: 'Help others understand the real impact of immigration reform.',
     priority: 2,
     minScore: 50,
     buttonText: 'Share Now',
@@ -57,7 +57,7 @@ const ACTIONS: ActionCard[] = [
     id: 'contact-rep',
     icon: Megaphone,
     title: 'Contact Your Representative',
-    description: 'Tell your elected officials you support the $30K wage theft fine.',
+    description: 'Tell your elected officials you support comprehensive immigration reform.',
     priority: 3,
     minScore: 70,
     buttonText: 'Take Action',
@@ -68,7 +68,7 @@ const ACTIONS: ActionCard[] = [
     id: 'organize',
     icon: Users,
     title: 'Organize Your Community',
-    description: 'Start a local campaign to push for stronger wage theft penalties.',
+    description: 'Start a local campaign to push for immigration reform that works.',
     priority: 4,
     minScore: 80,
     buttonText: 'Get Started',
@@ -79,7 +79,7 @@ const ACTIONS: ActionCard[] = [
     id: 'donate',
     icon: DollarSign,
     title: 'Support the Cause',
-    description: 'Fund advocacy efforts to pass wage theft legislation.',
+    description: 'Fund advocacy efforts for comprehensive immigration reform.',
     priority: 5,
     minScore: 90,
     buttonText: 'Donate',
@@ -90,7 +90,7 @@ const ACTIONS: ActionCard[] = [
     id: 'learn-more',
     icon: FileText,
     title: 'Deep Dive',
-    description: 'Read the full policy proposal and research.',
+    description: 'Read the full immigration reform policy proposal and research.',
     priority: 6,
     minScore: 0,
     buttonText: 'Learn More',
@@ -134,8 +134,8 @@ export default function CallToActionLayer({theme, persuasionScore}: Props) {
       case 'share':
         if (navigator.share) {
           navigator.share({
-            title: 'End Wage Theft with Real Consequences',
-            text: 'I just learned about a $30K fine for wage theft. See how it would change everything.',
+            title: 'Immigration Reform That Works',
+            text: 'I just learned about a comprehensive immigration reform approach. See how it would change everything.',
             url: window.location.origin,
           })
         }
@@ -248,7 +248,7 @@ export default function CallToActionLayer({theme, persuasionScore}: Props) {
             <CardContent className="p-8">
               <form onSubmit={handleEmailSubmit} className="space-y-4">
                 <p className="text-center text-gray-600 dark:text-gray-400 mb-6">
-                  Join thousands fighting for fair wages and real consequences for wage theft.
+                  Join thousands fighting for comprehensive immigration reform that works.
                 </p>
                 <div className="flex gap-4 max-w-xl mx-auto">
                   <Input
@@ -346,7 +346,7 @@ export default function CallToActionLayer({theme, persuasionScore}: Props) {
         <p className="text-xl text-gray-700 dark:text-gray-300 max-w-3xl mx-auto">
           Change doesn't happen by accident. It happens when people like you decide to act.
           <span className="block mt-4 font-bold text-purple-600 dark:text-purple-400">
-            Thank you for taking this journey. Together, we can end wage theft.
+            Thank you for taking this journey. Together, we can build immigration reform that works.
           </span>
         </p>
       </motion.div>

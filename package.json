@@ -10,7 +10,8 @@
     "sanity:init": "sanity init",
     "sanity:deploy": "sanity deploy",
     "sanity:test": "tsx scripts/test-sanity-connection.ts",
-    "migrate:content": "tsx scripts/migrate-immigration-content.ts"
+    "migrate:content": "tsx scripts/migrate-immigration-content.ts",
+    "migrate:impacts": "tsx scripts/migrate-impact-points.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",

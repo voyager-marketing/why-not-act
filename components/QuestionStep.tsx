@@ -1,6 +1,6 @@
 'use client'
 
-import type {Question, Theme, Answer} from '@/types/form'
+import type {Question, Theme, Answer, ThemedFraming} from '@/types/form'
 import {Card, CardContent, CardHeader, CardTitle} from '@/components/ui/card'
 import {Button} from '@/components/ui/button'
 import {motion} from 'framer-motion'
@@ -14,15 +14,15 @@ interface Props {
 
 export default function QuestionStep({question, theme, onAnswer}: Props) {
   // Convert theme from URL format to camelCase key
-  const themeKeyMap: Record<Theme, 'farLeft' | 'centerLeft' | 'centerRight' | 'farRight'> = {
+  const themeKeyMap: Record<Theme, 'farLeft' | 'midLeft' | 'midRight' | 'farRight'> = {
     'far-left': 'farLeft',
-    'center-left': 'centerLeft',
-    'center-right': 'centerRight',
+    'center-left': 'midLeft',
+    'center-right': 'midRight',
     'far-right': 'farRight',
   }
 
   const themeKey = themeKeyMap[theme]
-  const themedContent = question[themeKey]
+  const themedContent = question[themeKey as keyof Question] as ThemedFraming | undefined
 
   // Safety check
   if (!themedContent || !themedContent.headline || !Array.isArray(themedContent.bullets) || themedContent.bullets.length === 0) {
