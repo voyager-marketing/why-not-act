@@ -5,7 +5,7 @@ import {motion, useInView} from 'framer-motion'
 import type {Theme} from '@/types/form'
 import {Card, CardContent} from '@/components/ui/card'
 import {Button} from '@/components/ui/button'
-import {CheckCircle, XCircle, AlertCircle} from 'lucide-react'
+import {CheckCircle, XCircle, AlertCircle, Loader2} from 'lucide-react'
 import {useJourneyStore} from '@/lib/journeyStore'
 
 interface ImmigrationFact {
@@ -14,42 +14,42 @@ interface ImmigrationFact {
   lensSpecificFacts: Record<Theme, string>
 }
 
-const IMMIGRATION_FACTS: ImmigrationFact[] = [
-  {
-    id: 'deportation-cost',
-    question: 'Did you know? Mass deportation of 11 million people would cost between $315 billion and $960 billion—more than the entire annual budget of the Department of Defense.',
-    lensSpecificFacts: {
-      'far-right': 'Mass deportation of 11 million people would cost between $315 billion and $960 billion—more than the entire annual budget of the Department of Defense.',
-      'mid-right': 'Undocumented immigrants paid an estimated $580 billion in taxes over the past decade, including Social Security and Medicare taxes they can\'t claim.',
-      'mid-left': 'More than 5 million U.S. citizen children live in mixed-status households. Deporting their parents would devastate these American families.',
-      'far-left': 'The U.S. immigration system has a backlog of over 3 million cases, with some people waiting more than a decade for their day in court.',
-    },
-  },
-  {
-    id: 'criminal-record',
-    question: 'Did you know? About 90-95% of undocumented immigrants have no criminal record beyond their immigration status.',
-    lensSpecificFacts: {
-      'far-right': 'About 90-95% of undocumented immigrants have no criminal record beyond their immigration status.',
-      'mid-right': 'Mass deportation would shrink the U.S. economy by $1.6 trillion over 10 years, according to non-partisan economic analyses.',
-      'mid-left': 'Undocumented immigrants own more than 815,000 businesses in the U.S., employing millions of American workers and contributing billions to the economy.',
-      'far-left': 'Many undocumented immigrants fled violence, poverty, or persecution—situations often worsened by U.S. foreign policy.',
-    },
-  },
-  {
-    id: 'fine-revenue',
-    question: 'Did you know? A $30,000-per-person fine on undocumented immigrants could generate $330 billion—enough to fully fund a border wall, increase ICE enforcement, and hire thousands more Border Patrol agents.',
-    lensSpecificFacts: {
-      'far-right': 'A $30,000-per-person fine on undocumented immigrants could generate $330 billion—enough to fully fund a border wall, increase ICE enforcement, and hire thousands more Border Patrol agents.',
-      'mid-right': 'A $30,000 fine per person would generate $330 billion in revenue—more than enough to offset any costs and fund stronger border security.',
-      'mid-left': 'Undocumented immigrants are significantly less likely to commit crimes than native-born Americans, according to decades of research.',
-      'far-left': 'Providing a pathway to legal status would increase tax revenue by billions annually and grow the economy for everyone.',
-    },
-  },
-]
+// Theme mapping: component Theme type to Sanity IdeologyType
+const themeToIdeology = (theme: Theme): string => {
+  const mapping: Record<Theme, string> = {
+    'far-left': 'farLeft',
+    'center-left': 'centerLeft',
+    'center-right': 'centerRight',
+    'far-right': 'farRight',
+  }
+  return mapping[theme] || 'centerRight'
+}
 
 interface Props {
   theme: Theme
   onComplete: () => void
+  initialFacts?: ImmigrationFact[]
+}
+
+// Sanity data transformation helper
+function transformSanityDataToFacts(sanityData: any[]): ImmigrationFact[] {
+  return sanityData.map((item) => {
+    // Fallback to neutralContext if interpretation headline is not available
+    const getFact = (interpretation: any) => {
+      return interpretation?.headline || item.neutralContext || item.statistic || 'Did you know?'
+    }
+
+    return {
+      id: item._id,
+      question: item.neutralContext || item.statistic || 'Did you know?',
+      lensSpecificFacts: {
+        'far-left': getFact(item.farLeftInterpretation),
+        'center-left': getFact(item.centerLeftInterpretation),
+        'center-right': getFact(item.centerRightInterpretation),
+        'far-right': getFact(item.farRightInterpretation),
+      },
+    }
+  })
 }
 
 function FactCard({
@@ -147,10 +147,54 @@ function FactCard({
   )
 }
 
-export default function DataRealityLayer({theme, onComplete}: Props) {
+export default function DataRealityLayer({theme, onComplete, initialFacts}: Props) {
   const {markDataPointViewed, recordResponse} = useJourneyStore()
   const [answeredFacts, setAnsweredFacts] = useState<Set<string>>(new Set())
-  const allAnswered = answeredFacts.size >= IMMIGRATION_FACTS.length
+  const [facts, setFacts] = useState<ImmigrationFact[]>(initialFacts || [])
+  const [isLoading, setIsLoading] = useState(!initialFacts)
+  const [error, setError] = useState<string | null>(null)
+
+  const allAnswered = answeredFacts.size >= facts.length
+
+  // Fetch facts from Sanity if not provided as props
+  useEffect(() => {
+    if (initialFacts) {
+      setFacts(initialFacts)
+      setIsLoading(false)
+      return
+    }
+
+    const fetchFacts = async () => {
+      setIsLoading(true)
+      setError(null)
+
+      try {
+        const response = await fetch('/api/data-points')
+
+        if (!response.ok) {
+          throw new Error(`Failed to fetch data points: ${response.statusText}`)
+        }
+
+        const data = await response.json()
+
+        if (data.error) {
+          throw new Error(data.error)
+        }
+
+        const transformedFacts = transformSanityDataToFacts(data.dataPoints || [])
+        setFacts(transformedFacts)
+      } catch (err) {
+        console.error('Error fetching data points:', err)
+        setError(err instanceof Error ? err.message : 'Failed to load data')
+        // Fallback to empty array on error
+        setFacts([])
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    fetchFacts()
+  }, [initialFacts])
 
   const handleAnswer = (factId: string, answer: 'yes' | 'no') => {
     // Track in journey store
@@ -182,37 +226,103 @@ export default function DataRealityLayer({theme, onComplete}: Props) {
         </p>
       </motion.div>
 
+      {/* Loading State */}
+      {isLoading && (
+        <motion.div
+          initial={{opacity: 0}}
+          animate={{opacity: 1}}
+          className="flex flex-col items-center justify-center py-20"
+        >
+          <Loader2 className="w-12 h-12 text-purple-600 animate-spin mb-4" />
+          <p className="text-gray-600 dark:text-gray-400">Loading facts...</p>
+        </motion.div>
+      )}
+
+      {/* Error State */}
+      {error && !isLoading && (
+        <motion.div
+          initial={{opacity: 0, y: 20}}
+          animate={{opacity: 1, y: 0}}
+          className="max-w-2xl mx-auto"
+        >
+          <Card className="border-red-200 dark:border-red-800">
+            <CardContent className="p-8 text-center">
+              <AlertCircle className="w-12 h-12 text-red-600 dark:text-red-400 mx-auto mb-4" />
+              <h3 className="text-xl font-semibold text-red-900 dark:text-red-100 mb-2">
+                Unable to Load Facts
+              </h3>
+              <p className="text-red-700 dark:text-red-300 mb-6">{error}</p>
+              <Button
+                onClick={() => window.location.reload()}
+                variant="outline"
+                className="border-red-300 text-red-700 hover:bg-red-50 dark:border-red-700 dark:text-red-300 dark:hover:bg-red-900/20"
+              >
+                Try Again
+              </Button>
+            </CardContent>
+          </Card>
+        </motion.div>
+      )}
+
       {/* Immigration Facts */}
-      <div className="space-y-8 mb-12">
-        {IMMIGRATION_FACTS.map((fact, index) => (
-          <FactCard
-            key={fact.id}
-            fact={fact}
-            theme={theme}
-            index={index}
-            onAnswer={handleAnswer}
-          />
-        ))}
-      </div>
+      {!isLoading && !error && facts.length > 0 && (
+        <div className="space-y-8 mb-12">
+          {facts.map((fact, index) => (
+            <FactCard
+              key={fact.id}
+              fact={fact}
+              theme={theme}
+              index={index}
+              onAnswer={handleAnswer}
+            />
+          ))}
+        </div>
+      )}
+
+      {/* No Facts Available */}
+      {!isLoading && !error && facts.length === 0 && (
+        <motion.div
+          initial={{opacity: 0, y: 20}}
+          animate={{opacity: 1, y: 0}}
+          className="max-w-2xl mx-auto"
+        >
+          <Card>
+            <CardContent className="p-8 text-center">
+              <AlertCircle className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+              <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-2">
+                No Facts Available
+              </h3>
+              <p className="text-gray-600 dark:text-gray-400 mb-6">
+                We couldn't find any data points to display. Please check back later.
+              </p>
+              <Button onClick={onComplete} variant="outline">
+                Continue
+              </Button>
+            </CardContent>
+          </Card>
+        </motion.div>
+      )}
 
       {/* Progress Indicator */}
-      <motion.div
-        initial={{opacity: 0}}
-        animate={{opacity: 1}}
-        className="text-center mb-8"
-      >
-        <p className="text-sm text-gray-500 dark:text-gray-400">
-          {answeredFacts.size} of {IMMIGRATION_FACTS.length} facts explored
-        </p>
-        <div className="w-full max-w-md mx-auto mt-2 h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
-          <motion.div
-            className="h-full bg-blue-600 dark:bg-blue-400"
-            initial={{width: 0}}
-            animate={{width: `${(answeredFacts.size / IMMIGRATION_FACTS.length) * 100}%`}}
-            transition={{duration: 0.5}}
-          />
-        </div>
-      </motion.div>
+      {!isLoading && !error && facts.length > 0 && (
+        <motion.div
+          initial={{opacity: 0}}
+          animate={{opacity: 1}}
+          className="text-center mb-8"
+        >
+          <p className="text-sm text-gray-500 dark:text-gray-400">
+            {answeredFacts.size} of {facts.length} facts explored
+          </p>
+          <div className="w-full max-w-md mx-auto mt-2 h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+            <motion.div
+              className="h-full bg-blue-600 dark:bg-blue-400"
+              initial={{width: 0}}
+              animate={{width: `${(answeredFacts.size / facts.length) * 100}%`}}
+              transition={{duration: 0.5}}
+            />
+          </div>
+        </motion.div>
+      )}
 
       {/* Transition Text */}
       {allAnswered && (

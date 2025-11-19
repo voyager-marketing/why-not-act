@@ -80,7 +80,7 @@ export default function SubmitStoryPage() {
           thankYou:
             'Thank you for sharing your story! Your voice amplifies the movement for justice. Stories like yours show why we must fight for systemic change.',
         }
-      case 'mid-left':
+      case 'center-left':
         return {
           title: 'Share Your Immigration Story',
           description:
@@ -90,7 +90,7 @@ export default function SubmitStoryPage() {
           thankYou:
             'Thank you for sharing! Your story helps others understand the human impact of immigration policy and why reform matters.',
         }
-      case 'mid-right':
+      case 'center-right':
         return {
           title: 'Share Your Perspective',
           description:

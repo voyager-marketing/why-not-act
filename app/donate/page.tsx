@@ -73,7 +73,7 @@ export default function DonatePage() {
           thankYou:
             'Solidarity forever! Your contribution fuels the movement for justice and equality. Together we rise!',
         }
-      case 'mid-left':
+      case 'center-left':
         return {
           title: 'Invest in Progress',
           description:
@@ -81,7 +81,7 @@ export default function DonatePage() {
           thankYou:
             'Thank you for investing in meaningful change! Your donation helps build a better immigration system for all.',
         }
-      case 'mid-right':
+      case 'center-right':
         return {
           title: 'Support Responsible Reform',
           description:

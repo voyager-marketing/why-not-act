@@ -49,7 +49,7 @@ interface ValuesContent {
 }
 
 const VALUES_CONTENT: Record<Theme, ValuesContent> = {
-  'mid-right': {
+  'center-right': {
     explanation: [
       'This idea delivers legal accountability while avoiding the enormous cost of mass deportation.',
       'It\'s fiscally responsible — turning a broken system into a revenue generator instead of a financial disaster.',
@@ -69,7 +69,7 @@ const VALUES_CONTENT: Record<Theme, ValuesContent> = {
     yesLabel: 'Let\'s look at what this could achieve.',
     maybeLabel: 'Let\'s examine the impact together.',
   },
-  'mid-left': {
+  'center-left': {
     explanation: [
       'This idea offers a humane, structured path forward — one that keeps families together and avoids the chaos of deporting millions.',
       'It saves billions in taxpayer dollars while strengthening the healthcare, education, and local economies that rely on immigrant labor.',

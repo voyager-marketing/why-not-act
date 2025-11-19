@@ -8,7 +8,7 @@ import type {Answer} from '@/types/form'
  */
 
 // Types for the journey store
-export type PoliticalLens = 'far-left' | 'mid-left' | 'mid-right' | 'far-right'
+export type PoliticalLens = 'far-left' | 'center-left' | 'center-right' | 'far-right'
 export type Layer = 'value-alignment' | 'data-exposure' | 'objection-handling' | 'commitment'
 
 export interface QuestionResponse {

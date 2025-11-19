@@ -36,8 +36,8 @@ export function useTheme() {
     // Remove all existing theme classes
     root.classList.remove(
       'theme-far-right',
-      'theme-mid-right',
-      'theme-mid-left',
+      'theme-center-right',
+      'theme-center-left',
       'theme-far-left'
     )
 

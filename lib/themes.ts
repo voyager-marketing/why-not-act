@@ -71,7 +71,7 @@ export const ideologyThemes: Record<Theme, ThemeConfig> = {
     },
   },
 
-  'mid-right': {
+  'center-right': {
     colors: {
       primary: 'oklch(0.50 0.14 10)', // Conservative red-orange
       secondary: 'oklch(0.40 0.10 10)', // Darker red-orange
@@ -97,7 +97,7 @@ export const ideologyThemes: Record<Theme, ThemeConfig> = {
     },
   },
 
-  'mid-left': {
+  'center-left': {
     colors: {
       primary: 'oklch(0.55 0.15 230)', // Progressive blue
       secondary: 'oklch(0.45 0.12 230)', // Deeper blue
@@ -152,10 +152,10 @@ export const ideologyThemes: Record<Theme, ThemeConfig> = {
 
 /**
  * Get the theme configuration for a specific political lens.
- * Falls back to mid-left theme if invalid lens provided.
+ * Falls back to center-left theme if invalid lens provided.
  */
 export function getThemeForLens(lens: Theme): ThemeConfig {
-  return ideologyThemes[lens] || ideologyThemes['mid-left']
+  return ideologyThemes[lens] || ideologyThemes['center-left']
 }
 
 /**

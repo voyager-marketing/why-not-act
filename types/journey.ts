@@ -16,7 +16,7 @@ export type PoliticalLens = 'far-right' | 'center-right' | 'center-left' | 'far-
  * Backward compatibility alias for existing 'Theme' usage
  * @deprecated Use PoliticalLens instead
  */
-export type Theme = 'far-left' | 'mid-left' | 'mid-right' | 'far-right'
+export type Theme = 'far-left' | 'center-left' | 'center-right' | 'far-right'
 
 /**
  * The seven layers of the persuasion journey framework
@@ -130,8 +130,8 @@ export const ANSWER_WEIGHTS: Record<AnswerType, PersuasionWeight> = {
 export function themeToPoliticalLens(theme: Theme): PoliticalLens {
   const mapping: Record<Theme, PoliticalLens> = {
     'far-left': 'far-left',
-    'mid-left': 'center-left',
-    'mid-right': 'center-right',
+    'center-left': 'center-left',
+    'center-right': 'center-right',
     'far-right': 'far-right'
   }
   return mapping[theme]
@@ -145,8 +145,8 @@ export function themeToPoliticalLens(theme: Theme): PoliticalLens {
 export function politicalLensToTheme(lens: PoliticalLens): Theme {
   const mapping: Record<PoliticalLens, Theme> = {
     'far-left': 'far-left',
-    'center-left': 'mid-left',
-    'center-right': 'mid-right',
+    'center-left': 'center-left',
+    'center-right': 'center-right',
     'far-right': 'far-right'
   }
   return mapping[lens]

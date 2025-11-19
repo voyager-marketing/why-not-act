@@ -10,7 +10,7 @@
  * @deprecated Use PoliticalLens from './journey' instead
  * Legacy theme type for backward compatibility
  */
-export type Theme = 'far-left' | 'mid-left' | 'mid-right' | 'far-right'
+export type Theme = 'far-left' | 'center-left' | 'center-right' | 'far-right'
 
 /**
  * @deprecated Use AnswerType from './journey' instead

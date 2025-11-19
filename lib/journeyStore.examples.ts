@@ -9,7 +9,7 @@ import {useJourneyStore, useJourneyScores, usePoliticalLens} from './journeyStor
 export function ExampleLensSelection() {
   const {politicalLens, setLens} = useJourneyStore()
 
-  const handleLensSelection = (lens: 'far-left' | 'mid-left' | 'mid-right' | 'far-right') => {
+  const handleLensSelection = (lens: 'far-left' | 'center-left' | 'center-right' | 'far-right') => {
     setLens(lens)
     console.log('Journey started with lens:', lens)
   }
@@ -150,7 +150,7 @@ export function ExampleObjectionHandling() {
 export function ExampleCompleteJourney() {
   const store = useJourneyStore()
 
-  const startJourney = (lens: 'far-left' | 'mid-left' | 'mid-right' | 'far-right') => {
+  const startJourney = (lens: 'far-left' | 'center-left' | 'center-right' | 'far-right') => {
     // 1. Reset if starting fresh
     store.reset()
 

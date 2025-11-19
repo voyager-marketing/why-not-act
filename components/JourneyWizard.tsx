@@ -91,8 +91,8 @@ export default function JourneyWizard({theme}: Props) {
 
   const themeColors: Record<Theme, string> = {
     'far-left': 'from-blue-600 to-blue-700',
-    'mid-left': 'from-blue-400 to-blue-500',
-    'mid-right': 'from-red-400 to-red-500',
+    'center-left': 'from-blue-400 to-blue-500',
+    'center-right': 'from-red-400 to-red-500',
     'far-right': 'from-red-600 to-red-700',
   }
 

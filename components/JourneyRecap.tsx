@@ -13,16 +13,16 @@ interface Props {
 // Theme display names
 const THEME_NAMES: Record<Theme, string> = {
   'far-left': 'Progressive',
-  'mid-left': 'Liberal',
-  'mid-right': 'Conservative',
+  'center-left': 'Liberal',
+  'center-right': 'Conservative',
   'far-right': 'Traditionalist',
 }
 
 // Theme colors
 const THEME_COLORS: Record<Theme, string> = {
   'far-left': 'bg-red-500',
-  'mid-left': 'bg-blue-500',
-  'mid-right': 'bg-purple-500',
+  'center-left': 'bg-blue-500',
+  'center-right': 'bg-purple-500',
   'far-right': 'bg-indigo-500',
 }
 

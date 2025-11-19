@@ -14,10 +14,10 @@ interface Props {
 
 export default function QuestionStep({question, theme, onAnswer}: Props) {
   // Convert theme from URL format to camelCase key
-  const themeKeyMap: Record<Theme, 'farLeft' | 'midLeft' | 'midRight' | 'farRight'> = {
+  const themeKeyMap: Record<Theme, 'farLeft' | 'centerLeft' | 'centerRight' | 'farRight'> = {
     'far-left': 'farLeft',
-    'mid-left': 'midLeft',
-    'mid-right': 'midRight',
+    'center-left': 'centerLeft',
+    'center-right': 'centerRight',
     'far-right': 'farRight',
   }
 

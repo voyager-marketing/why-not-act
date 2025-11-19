@@ -26,7 +26,7 @@ interface LensImpacts {
 
 const LENS_IMPACTS: LensImpacts[] = [
   {
-    lens: 'mid-right',
+    lens: 'center-right',
     impacts: [
       {
         emoji: '💰',
@@ -87,7 +87,7 @@ const LENS_IMPACTS: LensImpacts[] = [
       'Would a safer, more controlled immigration system that strengthens sovereignty feel like a step in the right direction?',
   },
   {
-    lens: 'mid-left',
+    lens: 'center-left',
     impacts: [
       {
         emoji: '❤️',

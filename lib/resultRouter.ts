@@ -1,8 +1,8 @@
 import type {Theme, ResultType} from '@/types/form'
 
 export function getResultType(score: number, theme: Theme): ResultType {
-  const isLeft = theme === 'far-left' || theme === 'mid-left'
-  const isRight = theme === 'mid-right' || theme === 'far-right'
+  const isLeft = theme === 'far-left' || theme === 'center-left'
+  const isRight = theme === 'center-right' || theme === 'far-right'
 
   // High engagement (8-10 points)
   if (score >= 8) {

@@ -21,8 +21,8 @@ export default async function JourneyPage({params}: PageProps) {
 export async function generateStaticParams() {
   return [
     {lens: 'far-left'},
-    {lens: 'mid-left'},
-    {lens: 'mid-right'},
+    {lens: 'center-left'},
+    {lens: 'center-right'},
     {lens: 'far-right'},
   ]
 }

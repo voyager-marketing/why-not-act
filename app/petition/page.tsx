@@ -72,7 +72,7 @@ export default function PetitionPage() {
           thankYou:
             'Thank you, comrade! Together we build a more just and equitable society. Your signature joins thousands fighting for immigrant rights and dignity for all.',
         }
-      case 'mid-left':
+      case 'center-left':
         return {
           title: 'Support Progressive Immigration Policy',
           description:
@@ -80,7 +80,7 @@ export default function PetitionPage() {
           thankYou:
             'Thank you for taking action! Your signature helps build momentum for practical, compassionate immigration reform that benefits everyone.',
         }
-      case 'mid-right':
+      case 'center-right':
         return {
           title: 'Demand Secure Borders and Fair Process',
           description:

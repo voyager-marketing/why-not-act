@@ -38,7 +38,7 @@ export function PoliticalLensQuiz() {
       iconColor: 'text-red-600',
     },
     {
-      id: 'mid-right',
+      id: 'center-right',
       label: 'Balanced Approach',
       statement: 'We need fair enforcement and practical solutions.',
       description: 'Combine rule of law with compassionate reform',
@@ -48,7 +48,7 @@ export function PoliticalLensQuiz() {
       iconColor: 'text-orange-600',
     },
     {
-      id: 'mid-left',
+      id: 'center-left',
       label: 'Opportunity Focus',
       statement: 'Immigration makes America stronger.',
       description: 'Recognize economic and cultural benefits',

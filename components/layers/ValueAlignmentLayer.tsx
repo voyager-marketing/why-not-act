@@ -1,53 +1,51 @@
 'use client'
 
-import {useState, useMemo} from 'react'
+import {useState, useMemo, useEffect} from 'react'
 import {motion} from 'framer-motion'
 import type {Theme, Answer} from '@/types/form'
+import type {LayeredQuestion} from '@/types/sanity'
 import {Card, CardContent, CardHeader, CardTitle} from '@/components/ui/card'
 import {Button} from '@/components/ui/button'
-import {CheckCircle2, XCircle, Shield, AlertCircle} from 'lucide-react'
+import {CheckCircle2, XCircle, Shield, AlertCircle, Loader2} from 'lucide-react'
 import {Progress} from '@/components/ui/progress'
+import {client} from '@/lib/sanity.client'
 
 interface ValueQuestion {
   id: string
   text: Record<Theme, string>
 }
 
-const VALUE_QUESTIONS: ValueQuestion[] = [
-  {
-    id: 'immigration-q1',
-    text: {
-      'far-right': 'Do you believe that people who break our immigration laws should face real consequences?',
-      'mid-right': 'Should undocumented immigrants be required to pay a significant fine if they want to stay in the U.S. legally?',
-      'mid-left': 'Should families who have been in the U.S. for years, working and contributing to their communities, have a chance to earn legal status?',
-      'far-left': 'Do you believe that all people, regardless of immigration status, deserve to be treated with dignity and respect?',
-    },
-  },
-  {
-    id: 'immigration-q2',
-    text: {
-      'far-right': 'Should we prioritize deporting undocumented immigrants with criminal records before focusing on families who have been here for years?',
-      'mid-right': 'Do you believe immigrants should learn English and understand U.S. civics before gaining legal status?',
-      'mid-left': 'Do you think deporting millions of people who are otherwise law-abiding would harm local economies and communities?',
-      'far-left': 'Should we create pathways for undocumented immigrants to gain legal status without punitive measures that separate families?',
-    },
-  },
-  {
-    id: 'immigration-q3',
-    text: {
-      'far-right': 'Do you think it\'s fair that undocumented immigrants can live here without following the same rules citizens and legal immigrants follow?',
-      'mid-right': 'Should any path to legal status require immigrants to contribute financially—like paying back taxes or funding border security?',
-      'mid-left': 'Should we create a system that allows undocumented immigrants to come forward, get right with the law, and stay legally?',
-      'far-left': 'Do you think immigrants contribute positively to our economy and communities?',
-    },
-  },
-]
-
 interface Props {
   theme: Theme
   onAnswer: (answer: Answer) => void
   onComplete: () => void
   answers: Record<string, Answer>
+}
+
+// Fetcher function for questions
+const fetchLayer2Questions = async (): Promise<ValueQuestion[]> => {
+  const query = `*[_type == "layeredQuestion" && layer == "layer2"] | order(order asc) {
+    _id,
+    "id": _id,
+    coreQuestion,
+    farRightFraming,
+    centerRightFraming,
+    centerLeftFraming,
+    farLeftFraming
+  }`
+
+  const sanityQuestions: LayeredQuestion[] = await client.fetch(query)
+
+  // Transform Sanity data to match ValueQuestion interface
+  return sanityQuestions.map((q) => ({
+    id: q._id,
+    text: {
+      'far-right': q.farRightFraming?.headline || q.coreQuestion || '',
+      'center-right': q.centerRightFraming?.headline || q.coreQuestion || '',
+      'center-left': q.centerLeftFraming?.headline || q.coreQuestion || '',
+      'far-left': q.farLeftFraming?.headline || q.coreQuestion || '',
+    },
+  }))
 }
 
 export default function ValueAlignmentLayer({
@@ -58,9 +56,42 @@ export default function ValueAlignmentLayer({
 }: Props) {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
   const [localAnswers, setLocalAnswers] = useState<Record<string, Answer>>({})
+  const [questions, setQuestions] = useState<ValueQuestion[] | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<Error | null>(null)
 
-  const currentQuestion = VALUE_QUESTIONS[currentQuestionIndex]
-  const allAnswered = Object.keys(localAnswers).length === VALUE_QUESTIONS.length
+  // Fetch questions from Sanity CMS on mount
+  useEffect(() => {
+    let isMounted = true
+
+    const loadQuestions = async () => {
+      try {
+        setIsLoading(true)
+        setError(null)
+        const data = await fetchLayer2Questions()
+        if (isMounted) {
+          setQuestions(data)
+        }
+      } catch (err) {
+        if (isMounted) {
+          setError(err instanceof Error ? err : new Error('Failed to load questions'))
+        }
+      } finally {
+        if (isMounted) {
+          setIsLoading(false)
+        }
+      }
+    }
+
+    loadQuestions()
+
+    return () => {
+      isMounted = false
+    }
+  }, [])
+
+  const currentQuestion = questions?.[currentQuestionIndex]
+  const allAnswered = questions ? Object.keys(localAnswers).length === questions.length : false
 
   // Calculate yes percentage
   const yesPercentage = useMemo(() => {
@@ -72,12 +103,14 @@ export default function ValueAlignmentLayer({
   const canProceed = yesPercentage >= 66 && allAnswered
 
   const handleAnswer = (answer: Answer) => {
+    if (!currentQuestion) return
+
     const newAnswers = {...localAnswers, [currentQuestion.id]: answer}
     setLocalAnswers(newAnswers)
     onAnswer(answer)
 
     // Move to next question or show results
-    if (currentQuestionIndex < VALUE_QUESTIONS.length - 1) {
+    if (questions && currentQuestionIndex < questions.length - 1) {
       setTimeout(() => {
         setCurrentQuestionIndex(currentQuestionIndex + 1)
       }, 300)
@@ -88,6 +121,107 @@ export default function ValueAlignmentLayer({
     if (canProceed) {
       onComplete()
     }
+  }
+
+  // Loading state
+  if (isLoading) {
+    return (
+      <div className="space-y-6">
+        <motion.div
+          initial={{opacity: 0, y: -20}}
+          animate={{opacity: 1, y: 0}}
+          className="text-center mb-8"
+        >
+          <div className="flex items-center justify-center gap-3 mb-4">
+            <Shield className="w-10 h-10 text-purple-600" />
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-100">
+              Building Trust
+            </h2>
+          </div>
+          <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+            Before we dive into the details, let's align on some core values.
+          </p>
+        </motion.div>
+
+        <Card className="shadow-2xl">
+          <CardContent className="p-12 flex flex-col items-center justify-center gap-4">
+            <Loader2 className="w-12 h-12 text-purple-600 animate-spin" />
+            <p className="text-gray-600 dark:text-gray-400">Loading questions...</p>
+          </CardContent>
+        </Card>
+      </div>
+    )
+  }
+
+  // Error state
+  if (error) {
+    return (
+      <div className="space-y-6">
+        <motion.div
+          initial={{opacity: 0, y: -20}}
+          animate={{opacity: 1, y: 0}}
+          className="text-center mb-8"
+        >
+          <div className="flex items-center justify-center gap-3 mb-4">
+            <Shield className="w-10 h-10 text-purple-600" />
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-100">
+              Building Trust
+            </h2>
+          </div>
+        </motion.div>
+
+        <Card className="shadow-2xl border-red-200 dark:border-red-800">
+          <CardContent className="p-12 flex flex-col items-center justify-center gap-4">
+            <AlertCircle className="w-12 h-12 text-red-600" />
+            <p className="text-red-600 dark:text-red-400 font-semibold">
+              Failed to load questions
+            </p>
+            <p className="text-gray-600 dark:text-gray-400 text-sm">
+              {error.message || 'An error occurred while fetching questions from the server.'}
+            </p>
+            <Button
+              onClick={() => window.location.reload()}
+              variant="outline"
+              className="mt-4"
+            >
+              Retry
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    )
+  }
+
+  // No questions found
+  if (!questions || questions.length === 0) {
+    return (
+      <div className="space-y-6">
+        <motion.div
+          initial={{opacity: 0, y: -20}}
+          animate={{opacity: 1, y: 0}}
+          className="text-center mb-8"
+        >
+          <div className="flex items-center justify-center gap-3 mb-4">
+            <Shield className="w-10 h-10 text-purple-600" />
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-100">
+              Building Trust
+            </h2>
+          </div>
+        </motion.div>
+
+        <Card className="shadow-2xl">
+          <CardContent className="p-12 flex flex-col items-center justify-center gap-4">
+            <AlertCircle className="w-12 h-12 text-amber-600" />
+            <p className="text-gray-600 dark:text-gray-400">
+              No questions available at this time.
+            </p>
+            <Button onClick={onComplete} className="mt-4">
+              Continue Anyway
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    )
   }
 
   return (
@@ -144,7 +278,7 @@ export default function ValueAlignmentLayer({
       )}
 
       {/* Question Card */}
-      {!allAnswered && (
+      {!allAnswered && currentQuestion && (
         <motion.div
           key={currentQuestion.id}
           initial={{opacity: 0, x: 50}}
@@ -155,7 +289,7 @@ export default function ValueAlignmentLayer({
           <Card className="shadow-2xl">
             <CardHeader className="bg-gradient-to-r from-purple-50 to-blue-50 dark:from-gray-800 dark:to-gray-800 pb-6">
               <div className="text-sm text-gray-500 dark:text-gray-400 mb-2">
-                Question {currentQuestionIndex + 1} of {VALUE_QUESTIONS.length}
+                Question {currentQuestionIndex + 1} of {questions.length}
               </div>
               <CardTitle className="text-2xl md:text-3xl leading-tight">
                 {currentQuestion.text[theme]}

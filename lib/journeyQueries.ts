@@ -57,12 +57,12 @@ export async function getQuestionsByLens(lens: PoliticalLens) {
         "bullets": farLeftBullets,
         "context": farLeftContext
       },
-      $lens == "mid-left" => {
+      $lens == "center-left" => {
         "headline": midLeftHeadline,
         "bullets": midLeftBullets,
         "context": midLeftContext
       },
-      $lens == "mid-right" => {
+      $lens == "center-right" => {
         "headline": midRightHeadline,
         "bullets": midRightBullets,
         "context": midRightContext
@@ -92,20 +92,20 @@ export async function getQuestionsWithFraming(lens: PoliticalLens, layer?: Layer
     persuasionWeight,
     "headline": select(
       $lens == "far-left" => farLeftHeadline,
-      $lens == "mid-left" => midLeftHeadline,
-      $lens == "mid-right" => midRightHeadline,
+      $lens == "center-left" => midLeftHeadline,
+      $lens == "center-right" => midRightHeadline,
       $lens == "far-right" => farRightHeadline
     ),
     "bullets": select(
       $lens == "far-left" => farLeftBullets,
-      $lens == "mid-left" => midLeftBullets,
-      $lens == "mid-right" => midRightBullets,
+      $lens == "center-left" => midLeftBullets,
+      $lens == "center-right" => midRightBullets,
       $lens == "far-right" => farRightBullets
     ),
     "context": select(
       $lens == "far-left" => farLeftContext,
-      $lens == "mid-left" => midLeftContext,
-      $lens == "mid-right" => midRightContext,
+      $lens == "center-left" => midLeftContext,
+      $lens == "center-right" => midRightContext,
       $lens == "far-right" => farRightContext
     ),
     dataPointReferences[]->

@@ -294,8 +294,8 @@ export function generateJourneySummary(
 export function convertLegacyJourney(legacy: LegacyUserJourney): UserJourney {
   const politicalLensMap: Record<Theme, PoliticalLens> = {
     'far-left': 'far-left',
-    'mid-left': 'center-left',
-    'mid-right': 'center-right',
+    'center-left': 'center-left',
+    'center-right': 'center-right',
     'far-right': 'far-right'
   }
 

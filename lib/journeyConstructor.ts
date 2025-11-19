@@ -27,7 +27,7 @@ export function constructUserJourneyFromStore(): UserJourney {
 
   if (hasJourneyData) {
     // Use new journey store data
-    const theme = (journeyState.politicalLens || 'mid-left') as Theme
+    const theme = (journeyState.politicalLens || 'center-left') as Theme
 
     // Convert journey store responses to simple answers object
     const answers: Record<number, Answer> = {}
@@ -70,7 +70,7 @@ export function constructUserJourneyFromStore(): UserJourney {
     }
   } else {
     // Use legacy form store data
-    const theme = (formState.theme || 'mid-left') as Theme
+    const theme = (formState.theme || 'center-left') as Theme
     const answers = formState.answers
     const score = formState.score || Object.values(answers).reduce((total, answer) => {
       return total + (answer === 'yes' ? 2 : answer === 'maybe' ? 1 : 0)

@@ -23,11 +23,11 @@ const TESTIMONIALS = {
     quote: "This data opened my eyes to the systemic solutions we need. I'm ready to fight for justice.",
     author: "Maya R., Community Organizer",
   },
-  'mid-left': {
+  'center-left': {
     quote: "The evidence-based approach convinced me. We need practical reform that actually works.",
     author: "James K., Policy Analyst",
   },
-  'mid-right': {
+  'center-right': {
     quote: "These facts changed my perspective. This is about responsible, sustainable solutions.",
     author: "Sarah M., Business Owner",
   },

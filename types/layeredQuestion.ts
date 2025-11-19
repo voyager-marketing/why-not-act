@@ -258,8 +258,8 @@ export function getFramingForTheme(
 ): ContentFraming {
   const themeMap: Record<Theme, keyof LayeredQuestion['framings']> = {
     'far-left': 'farLeft',
-    'mid-left': 'centerLeft',
-    'mid-right': 'centerRight',
+    'center-left': 'centerLeft',
+    'center-right': 'centerRight',
     'far-right': 'farRight'
   }
 

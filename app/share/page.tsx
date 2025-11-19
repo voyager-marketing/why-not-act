@@ -82,7 +82,7 @@ export default function SharePage() {
             baseUrl,
         }
 
-      case 'mid-left':
+      case 'center-left':
         return {
           title: 'Share for Progress',
           description: 'Help us build support for sensible, humane immigration reform.',
@@ -101,7 +101,7 @@ export default function SharePage() {
             baseUrl,
         }
 
-      case 'mid-right':
+      case 'center-right':
         return {
           title: 'Share the Solution',
           description: 'Help us advocate for secure borders and fair processes.',

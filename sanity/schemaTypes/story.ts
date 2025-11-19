@@ -47,8 +47,8 @@ export const storyType = defineType({
       options: {
         list: [
           {title: 'Far Left', value: 'far-left'},
-          {title: 'Mid Left', value: 'mid-left'},
-          {title: 'Mid Right', value: 'mid-right'},
+          {title: 'Mid Left', value: 'center-left'},
+          {title: 'Mid Right', value: 'center-right'},
           {title: 'Far Right', value: 'far-right'},
           {title: 'Default', value: 'default'},
         ],

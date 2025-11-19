@@ -16,7 +16,7 @@ import {
   ShieldCheck,
   UserCheck,
 
-  // Business Set (mid-right)
+  // Business Set (center-right)
   Scale,
   Handshake,
   TrendingUp,
@@ -25,7 +25,7 @@ import {
   Briefcase,
   LineChart,
 
-  // Community Set (mid-left)
+  // Community Set (center-left)
   Users,
   Home,
   Heart,
@@ -223,8 +223,8 @@ export const contentIconSets = {
   // Theme indicators (for theme selection UI)
   themes: {
     'far-right': Shield,
-    'mid-right': Briefcase,
-    'mid-left': Users,
+    'center-right': Briefcase,
+    'center-left': Users,
     'far-left': Megaphone,
   },
 }
@@ -266,6 +266,6 @@ export function getResultIcon(resultType: 'revenue' | 'economic' | 'security' | 
  * @param theme - The theme identifier
  * @returns LucideIcon component
  */
-export function getThemeIcon(theme: 'far-right' | 'mid-right' | 'mid-left' | 'far-left'): LucideIcon {
+export function getThemeIcon(theme: 'far-right' | 'center-right' | 'center-left' | 'far-left'): LucideIcon {
   return contentIconSets.themes[theme]
 }

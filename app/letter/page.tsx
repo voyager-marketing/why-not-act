@@ -41,7 +41,7 @@ The WhyNotAct proposal represents the minimum necessary to create a just immigra
     closing:
       'The time for incremental change has passed. I expect you to fight for justice and human rights. The world is watching.',
   },
-  'mid-left': {
+  'center-left': {
     tone: 'Progressive & Pragmatic',
     opening:
       'As your constituent, I am writing to urge your support for sensible, humane immigration reform as outlined in the WhyNotAct proposal.',
@@ -57,7 +57,7 @@ These reforms are both compassionate and economically sound. Studies show that i
     closing:
       'I hope you will support evidence-based immigration reform that reflects our values as a nation. Thank you for your consideration.',
   },
-  'mid-right': {
+  'center-right': {
     tone: 'Conservative & Pragmatic',
     opening:
       'As your constituent, I am writing to urge your support for responsible immigration reform that prioritizes security while maintaining fairness.',
@@ -135,7 +135,7 @@ export default function LetterPage() {
   }
 
   const onSubmit = async (data: LetterFormData) => {
-    const template = LETTER_TEMPLATES[theme as keyof typeof LETTER_TEMPLATES] || LETTER_TEMPLATES['mid-left']
+    const template = LETTER_TEMPLATES[theme as keyof typeof LETTER_TEMPLATES] || LETTER_TEMPLATES['center-left']
 
     const letterContent = `${data.name}
 ${data.address}
@@ -173,7 +173,7 @@ ${data.email ? `Email: ${data.email}` : ''}`
     setIsSuccess(true)
   }
 
-  const template = LETTER_TEMPLATES[theme as keyof typeof LETTER_TEMPLATES] || LETTER_TEMPLATES['mid-left']
+  const template = LETTER_TEMPLATES[theme as keyof typeof LETTER_TEMPLATES] || LETTER_TEMPLATES['center-left']
 
   if (isSuccess) {
     return (

@@ -29,9 +29,9 @@ export default function ShareButtons({
         return platform === 'twitter'
           ? `${baseMessage} #ImmigrantJustice #SolidarityForever`
           : baseMessage
-      case 'mid-left':
+      case 'center-left':
         return platform === 'twitter' ? `${baseMessage} #ImmigrationReform #Progress` : baseMessage
-      case 'mid-right':
+      case 'center-right':
         return platform === 'twitter' ? `${baseMessage} #BorderSecurity #LawAndOrder` : baseMessage
       case 'far-right':
         return platform === 'twitter'
