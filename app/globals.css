@@ -3,39 +3,74 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
+  /* Core UI Colors */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  /* Brand Color Scale - Primary Blue (#789ADD) */
+  --color-brand-50: var(--brand-50);
+  --color-brand-100: var(--brand-100);
+  --color-brand-200: var(--brand-200);
+  --color-brand-300: var(--brand-300);
+  --color-brand-400: var(--brand-400);
+  --color-brand-500: var(--brand-500);
+  --color-brand-600: var(--brand-600);
+  --color-brand-700: var(--brand-700);
+  --color-brand-800: var(--brand-800);
+  --color-brand-900: var(--brand-900);
+  --color-brand-950: var(--brand-950);
+
+  /* Brand Semantic Colors */
+  --color-brand: var(--brand);
+  --color-brand-foreground: var(--brand-foreground);
+  --color-brand-muted: var(--brand-muted);
+  --color-brand-subtle: var(--brand-subtle);
+
+  /* Corporate/Technical Colors */
+  --color-navy: var(--navy);
+  --color-navy-light: var(--navy-light);
+  --color-steel: var(--steel);
+  --color-steel-light: var(--steel-light);
+  --color-patriot-red: var(--patriot-red);
+
+  /* Chart Colors */
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+
+  /* Sidebar Colors */
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  /* Typography & Fonts */
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-  --color-sidebar-ring: var(--sidebar-ring);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar: var(--sidebar);
-  --color-chart-5: var(--chart-5);
-  --color-chart-4: var(--chart-4);
-  --color-chart-3: var(--chart-3);
-  --color-chart-2: var(--chart-2);
-  --color-chart-1: var(--chart-1);
-  --color-ring: var(--ring);
-  --color-input: var(--input);
-  --color-border: var(--border);
-  --color-destructive: var(--destructive);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-accent: var(--accent);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-muted: var(--muted);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-secondary: var(--secondary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-primary: var(--primary);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-popover: var(--popover);
-  --color-card-foreground: var(--card-foreground);
-  --color-card: var(--card);
+
+  /* Border Radius */
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -43,72 +78,155 @@
 }
 
 :root {
-  --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
+  /* Sharp corners for corporate/technical feel */
+  --radius: 0;
+
+  /* ========================================
+   * Brand Color Scale - Primary Blue (#789ADD)
+   * WCAG AAA compliant with black text
+   * Generated from base color: oklch(0.72 0.10 255)
+   * ======================================== */
+  --brand-50: oklch(0.97 0.02 255);   /* Lightest - backgrounds */
+  --brand-100: oklch(0.94 0.04 255);  /* Light backgrounds */
+  --brand-200: oklch(0.88 0.06 255);  /* Hover backgrounds */
+  --brand-300: oklch(0.82 0.08 255);  /* Borders, dividers */
+  --brand-400: oklch(0.76 0.09 255);  /* Icons, secondary text */
+  --brand-500: oklch(0.72 0.10 255);  /* PRIMARY - #789ADD */
+  --brand-600: oklch(0.62 0.12 255);  /* Hover states */
+  --brand-700: oklch(0.52 0.14 255);  /* Active states */
+  --brand-800: oklch(0.42 0.12 255);  /* Dark text on light */
+  --brand-900: oklch(0.32 0.10 255);  /* Darkest text */
+  --brand-950: oklch(0.22 0.08 255);  /* Near black */
+
+  /* Semantic Brand Colors */
+  --brand: oklch(0.72 0.10 255);              /* Primary brand color */
+  --brand-foreground: oklch(0.15 0 0);        /* Text on brand backgrounds */
+  --brand-muted: oklch(0.94 0.04 255);        /* Muted brand background */
+  --brand-subtle: oklch(0.97 0.02 255);       /* Subtle brand tint */
+
+  /* Corporate/Technical Colors */
+  --navy: oklch(0.20 0.04 255);               /* Deep navy for headers */
+  --navy-light: oklch(0.25 0.04 255);         /* Lighter navy */
+  --steel: oklch(0.55 0.02 250);              /* Technical gray */
+  --steel-light: oklch(0.70 0.01 250);        /* Light steel */
+  --patriot-red: oklch(0.55 0.18 25);         /* Accent red for CTAs */
+
+  /* ========================================
+   * Core UI Colors (shadcn/ui compatible)
+   * ======================================== */
+  --background: oklch(0.99 0.005 255);
+  --foreground: oklch(0.15 0.02 255);
+
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
+  --card-foreground: oklch(0.15 0.02 255);
+
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.15 0.02 255);
+
+  --primary: oklch(0.72 0.10 255);
+  --primary-foreground: oklch(0.15 0 0);
+
+  --secondary: oklch(0.96 0.02 255);
+  --secondary-foreground: oklch(0.25 0.02 255);
+
+  --muted: oklch(0.95 0.01 255);
+  --muted-foreground: oklch(0.45 0.02 255);
+
+  --accent: oklch(0.92 0.04 255);
+  --accent-foreground: oklch(0.25 0.02 255);
+
   --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+
+  --border: oklch(0.90 0.02 255);
+  --input: oklch(0.92 0.02 255);
+  --ring: oklch(0.72 0.10 255);
+
+  /* Chart Colors */
+  --chart-1: oklch(0.72 0.10 255);
+  --chart-2: oklch(0.62 0.12 255);
+  --chart-3: oklch(0.52 0.14 255);
+  --chart-4: oklch(0.72 0.15 145);
+  --chart-5: oklch(0.72 0.08 45);
+
+  /* Sidebar */
+  --sidebar: oklch(0.98 0.005 255);
+  --sidebar-foreground: oklch(0.15 0.02 255);
+  --sidebar-primary: oklch(0.72 0.10 255);
+  --sidebar-primary-foreground: oklch(0.15 0 0);
+  --sidebar-accent: oklch(0.94 0.03 255);
+  --sidebar-accent-foreground: oklch(0.25 0.02 255);
+  --sidebar-border: oklch(0.90 0.02 255);
+  --sidebar-ring: oklch(0.72 0.10 255);
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
+  /* ========================================
+   * Dark Mode - Brand Blue Tinted
+   * ======================================== */
+
+  /* Brand Scale - Inverted for dark mode */
+  --brand-50: oklch(0.22 0.08 255);
+  --brand-100: oklch(0.28 0.09 255);
+  --brand-200: oklch(0.35 0.10 255);
+  --brand-300: oklch(0.45 0.11 255);
+  --brand-400: oklch(0.55 0.12 255);
+  --brand-500: oklch(0.72 0.10 255);  /* PRIMARY stays same */
+  --brand-600: oklch(0.78 0.09 255);
+  --brand-700: oklch(0.84 0.07 255);
+  --brand-800: oklch(0.90 0.05 255);
+  --brand-900: oklch(0.94 0.03 255);
+  --brand-950: oklch(0.97 0.02 255);
+
+  /* Semantic Brand Colors */
+  --brand: oklch(0.72 0.10 255);
+  --brand-foreground: oklch(0.15 0 0);
+  --brand-muted: oklch(0.25 0.04 255);
+  --brand-subtle: oklch(0.18 0.03 255);
+
+  /* Core UI Colors */
+  --background: oklch(0.14 0.02 255);
+  --foreground: oklch(0.95 0.01 255);
+
+  --card: oklch(0.18 0.02 255);
+  --card-foreground: oklch(0.95 0.01 255);
+
+  --popover: oklch(0.18 0.02 255);
+  --popover-foreground: oklch(0.95 0.01 255);
+
+  --primary: oklch(0.72 0.10 255);
+  --primary-foreground: oklch(0.15 0 0);
+
+  --secondary: oklch(0.25 0.03 255);
+  --secondary-foreground: oklch(0.95 0.01 255);
+
+  --muted: oklch(0.25 0.02 255);
+  --muted-foreground: oklch(0.65 0.03 255);
+
+  --accent: oklch(0.30 0.04 255);
+  --accent-foreground: oklch(0.95 0.01 255);
+
   --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
+
+  --border: oklch(1 0 0 / 12%);
   --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  --ring: oklch(0.72 0.10 255);
+
+  /* Chart Colors */
+  --chart-1: oklch(0.72 0.10 255);
+  --chart-2: oklch(0.78 0.09 255);
+  --chart-3: oklch(0.62 0.12 255);
+  --chart-4: oklch(0.75 0.15 145);
+  --chart-5: oklch(0.75 0.10 45);
+
+  /* Sidebar */
+  --sidebar: oklch(0.16 0.02 255);
+  --sidebar-foreground: oklch(0.95 0.01 255);
+  --sidebar-primary: oklch(0.72 0.10 255);
+  --sidebar-primary-foreground: oklch(0.15 0 0);
+  --sidebar-accent: oklch(0.25 0.03 255);
+  --sidebar-accent-foreground: oklch(0.95 0.01 255);
+  --sidebar-border: oklch(1 0 0 / 12%);
+  --sidebar-ring: oklch(0.72 0.10 255);
 }
 
 /* Ideology Theme Configurations */
@@ -318,6 +436,32 @@
   }
 }
 
+@keyframes accordion-down {
+  from {
+    height: 0;
+  }
+  to {
+    height: var(--radix-accordion-content-height);
+  }
+}
+
+@keyframes accordion-up {
+  from {
+    height: var(--radix-accordion-content-height);
+  }
+  to {
+    height: 0;
+  }
+}
+
+.animate-accordion-down {
+  animation: accordion-down 0.2s ease-out;
+}
+
+.animate-accordion-up {
+  animation: accordion-up 0.2s ease-out;
+}
+
 /* Smooth scrolling */
 html {
   scroll-behavior: smooth;
@@ -325,7 +469,7 @@ html {
 
 /* Enhanced focus states for accessibility */
 :focus-visible {
-  outline: 2px solid oklch(0.556 0 0);
+  outline: 2px solid var(--brand);
   outline-offset: 2px;
 }
 
@@ -345,4 +489,114 @@ button, a, input, select, textarea {
 
 .delay-1000 {
   animation-delay: 1000ms;
+}
+
+/* ========================================
+ * Brand Gradient Utilities
+ * Use: bg-gradient-brand, bg-gradient-brand-soft, text-gradient-brand
+ * ======================================== */
+.bg-gradient-brand {
+  background: linear-gradient(to right, var(--brand-700), var(--brand-500));
+}
+
+.bg-gradient-brand-soft {
+  background: linear-gradient(135deg, var(--brand-50), var(--brand-100));
+}
+
+.bg-gradient-brand-subtle {
+  background: linear-gradient(135deg, var(--brand-subtle), var(--brand-muted));
+}
+
+/* Text gradient for headings */
+.text-gradient-brand {
+  background: linear-gradient(to right, var(--brand-700), var(--brand-500), var(--brand-400));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ========================================
+ * Corporate/Technical Design System
+ * Bold, authoritative, American aesthetic
+ * ======================================== */
+
+/* Corporate Colors */
+.bg-navy {
+  background-color: var(--navy);
+}
+
+.bg-navy-light {
+  background-color: var(--navy-light);
+}
+
+.text-navy {
+  color: var(--navy);
+}
+
+.bg-steel {
+  background-color: var(--steel);
+}
+
+.text-steel {
+  color: var(--steel);
+}
+
+/* Typography - Bold, Authoritative */
+.section-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--brand-600);
+}
+
+.heading-display {
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+.heading-section {
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+}
+
+/* Angled Section Dividers */
+.clip-angle-bottom {
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 60px), 0 100%);
+}
+
+.clip-angle-top {
+  clip-path: polygon(0 60px, 100% 0, 100% 100%, 0 100%);
+}
+
+/* Hard Edge Cards - No rounded corners */
+.card-hard {
+  border-radius: 0;
+  border: 1px solid var(--border);
+}
+
+/* Stats Grid Border Style */
+.stats-grid-border {
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.stats-grid-border > * {
+  border-right: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.stats-grid-border > *:last-child {
+  border-right: none;
+}
+
+/* Accent Border Left (for testimonials, quotes) */
+.accent-border-left {
+  border-left: 4px solid var(--brand-600);
+}
+
+/* Navy gradient for dark sections */
+.bg-gradient-navy {
+  background: linear-gradient(180deg, var(--navy) 0%, var(--navy-light) 100%);
 }

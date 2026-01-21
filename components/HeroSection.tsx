@@ -1,116 +1,158 @@
 'use client'
 
-import {motion} from 'framer-motion'
 import {Button} from '@/components/ui/button'
-import {ArrowRight, Sparkles} from 'lucide-react'
+import {ArrowRight, Users, MapPin, TrendingUp, Shield} from 'lucide-react'
+import Image from 'next/image'
+import Link from 'next/link'
+import {motion} from 'framer-motion'
+import {AnimatedCounter} from '@/components/AnimatedCounter'
+import {fadeInUp, staggerContainer} from '@/lib/animations'
 
-interface HeroSectionProps {
-  onStartClick: () => void
-}
+const stats = [
+  {value: '12,847', label: 'Americans Engaged', icon: Users},
+  {value: '50', label: 'States Represented', icon: MapPin},
+  {value: '87%', label: 'Found Common Ground', icon: TrendingUp},
+  {value: '100%', label: 'Anonymous & Secure', icon: Shield},
+]
 
-export function HeroSection({onStartClick}: HeroSectionProps) {
+export function HeroSection() {
   return (
-    <section className="relative min-h-[70vh] flex items-center justify-center overflow-hidden">
-      {/* Animated Background Elements */}
-      <div className="absolute inset-0">
-        <div className="absolute top-20 left-10 w-72 h-72 bg-gradient-to-br from-purple-400/20 to-pink-400/20 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute bottom-20 right-10 w-96 h-96 bg-gradient-to-br from-blue-400/20 to-indigo-400/20 rounded-full blur-3xl animate-pulse delay-1000" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-br from-violet-400/10 to-fuchsia-400/10 rounded-full blur-3xl animate-pulse delay-500" />
-      </div>
+    <>
+      {/* Hero Section */}
+      <section className="relative min-h-[90vh] flex items-center bg-navy overflow-hidden">
+        {/* Background - Diverse American families */}
+        <div className="absolute inset-0">
+          <Image
+            src="/people-raising-usa-flags-in-the-air-2026-01-05-01-09-47-utc.jpg"
+            alt="People raising American flags in the air"
+            fill
+            className="object-cover"
+            priority
+          />
 
-      {/* Content */}
-      <div className="relative z-10 container mx-auto px-4 py-16 max-w-4xl text-center">
-        <motion.div
-          initial={{opacity: 0, y: 20}}
-          animate={{opacity: 1, y: 0}}
-          transition={{duration: 0.8}}
-        >
-          {/* Badge */}
+          {/* Gradient overlay for readability */}
+          <div className="absolute inset-0 bg-navy/65" />
+        </div>
+
+        {/* Content */}
+        <div className="relative z-10 container mx-auto px-4 py-24 lg:py-32">
           <motion.div
-            initial={{opacity: 0, scale: 0.9}}
-            animate={{opacity: 1, scale: 1}}
-            transition={{duration: 0.5, delay: 0.2}}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-purple-500/10 to-blue-500/10 border border-purple-500/20 mb-6"
+            className="max-w-4xl mx-auto text-center"
+            initial="hidden"
+            animate="visible"
+            variants={staggerContainer}
           >
-            <Sparkles className="w-4 h-4 text-purple-600" />
-            <span className="text-sm font-medium text-purple-700 dark:text-purple-300">
-              A New Way to Understand Immigration
-            </span>
-          </motion.div>
-
-          {/* Main Headline */}
-          <motion.h1
-            initial={{opacity: 0, y: 20}}
-            animate={{opacity: 1, y: 0}}
-            transition={{duration: 0.8, delay: 0.3}}
-            className="text-5xl md:text-7xl font-bold mb-6 leading-tight"
-          >
-            <span className="bg-gradient-to-r from-purple-600 via-violet-600 to-blue-600 bg-clip-text text-transparent">
-              What if immigration reform
-            </span>
-            <br />
-            <span className="text-gray-900 dark:text-white">
-              could unite America?
-            </span>
-          </motion.h1>
-
-          {/* Subheadline */}
-          <motion.p
-            initial={{opacity: 0, y: 20}}
-            animate={{opacity: 1, y: 0}}
-            transition={{duration: 0.8, delay: 0.5}}
-            className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed"
-          >
-            <span className="font-semibold text-gray-900 dark:text-white">5 minutes.</span>{' '}
-            <span className="font-semibold text-gray-900 dark:text-white">Your perspective.</span>{' '}
-            <span className="font-semibold text-gray-900 dark:text-white">Real solutions.</span>
-          </motion.p>
-
-          <motion.p
-            initial={{opacity: 0, y: 20}}
-            animate={{opacity: 1, y: 0}}
-            transition={{duration: 0.8, delay: 0.6}}
-            className="text-lg text-gray-500 dark:text-gray-400 mb-10 max-w-2xl mx-auto"
-          >
-            Discover how people across the political spectrum view immigration—and
-            find common ground you never knew existed.
-          </motion.p>
-
-          {/* CTA Button */}
-          <motion.div
-            initial={{opacity: 0, scale: 0.9}}
-            animate={{opacity: 1, scale: 1}}
-            transition={{duration: 0.5, delay: 0.7}}
-          >
-            <Button
-              onClick={onStartClick}
-              size="lg"
-              className="group relative px-8 py-6 text-lg font-semibold bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white shadow-xl hover:shadow-2xl transition-all duration-300"
-              aria-label="Start the conversation about immigration"
+            {/* Section Label */}
+            <motion.span
+              className="section-label text-brand-400 mb-6 block"
+              variants={fadeInUp}
             >
-              Start the Conversation
-              <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </Button>
-          </motion.div>
+              A New Approach to Immigration
+            </motion.span>
 
-          {/* Trust Indicators */}
-          <motion.div
-            initial={{opacity: 0}}
-            animate={{opacity: 1}}
-            transition={{duration: 0.8, delay: 0.9}}
-            className="mt-12 flex flex-wrap items-center justify-center gap-6 text-sm text-gray-500 dark:text-gray-400"
-          >
-            <div className="flex items-center gap-2">
-              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-              <span>100% Anonymous</span>
-            </div>
-            <div className="w-px h-4 bg-gray-300 dark:bg-gray-600" />
-            <div>No Registration Required</div>
-            <div className="w-px h-4 bg-gray-300 dark:bg-gray-600" />
-            <div>Takes 5 Minutes</div>
+            {/* Main Headline */}
+            <motion.h1
+              className="heading-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-white mb-8 leading-[1.1]"
+              variants={fadeInUp}
+            >
+              What if immigration could create{' '}
+              <span className="text-brand-400">opportunity</span>{' '}
+              instead of conflict?
+            </motion.h1>
+
+            {/* Subheadline */}
+            <motion.p
+              className="text-xl md:text-2xl text-gray-300 mb-10 leading-relaxed max-w-2xl mx-auto"
+              variants={fadeInUp}
+            >
+              Your perspective matters. Take 5 minutes to explore a practical,
+              data-driven approach to immigration reform.
+            </motion.p>
+
+            {/* CTA Buttons */}
+            <motion.div
+              className="flex flex-col sm:flex-row gap-4 justify-center"
+              variants={fadeInUp}
+            >
+              <Link href="/start">
+                <Button
+                  size="lg"
+                  className="group bg-brand-600 hover:bg-brand-700 text-white px-10 py-6 text-lg font-bold uppercase tracking-wide rounded-none"
+                  aria-label="Start your path to understanding immigration solutions"
+                >
+                  Start Your Path
+                  <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                </Button>
+              </Link>
+
+              <a href="#how-it-works">
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className="border-2 border-white bg-transparent text-white! hover:bg-white hover:text-navy! px-10 py-6 text-lg font-bold uppercase tracking-wide rounded-none"
+                >
+                  Learn More
+                </Button>
+              </a>
+            </motion.div>
+
+            {/* Trust Indicators */}
+            <motion.div
+              className="mt-12 flex flex-wrap items-center justify-center gap-6 text-sm text-gray-400"
+              variants={fadeInUp}
+            >
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 bg-green-500 rounded-full" />
+                <span>100% Anonymous</span>
+              </div>
+              <div className="w-px h-4 bg-gray-600 hidden sm:block" />
+              <span>No Registration Required</span>
+              <div className="w-px h-4 bg-gray-600 hidden sm:block" />
+              <span>Takes 5 Minutes</span>
+            </motion.div>
           </motion.div>
-        </motion.div>
-      </div>
-    </section>
+        </div>
+
+        {/* Angled bottom divider */}
+        <div
+          className="absolute bottom-0 left-0 right-0 h-16 md:h-24 bg-white"
+          style={{clipPath: 'polygon(0 100%, 100% 0, 100% 100%)'}}
+        />
+      </section>
+
+      {/* Stats Bar */}
+      <section className="bg-white border-b-4 border-brand-600">
+        <div className="container mx-auto">
+          <motion.div
+            className="grid grid-cols-2 md:grid-cols-4"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{once: true, margin: '-50px'}}
+            variants={staggerContainer}
+          >
+            {stats.map((stat, index) => {
+              const Icon = stat.icon
+              return (
+                <motion.div
+                  key={index}
+                  className="py-8 px-6 text-center border-r border-gray-200 last:border-r-0"
+                  variants={fadeInUp}
+                >
+                  <Icon className="w-6 h-6 mx-auto mb-2 text-brand-600" />
+                  <AnimatedCounter
+                    value={stat.value}
+                    className="block text-3xl md:text-4xl font-bold text-navy"
+                    delay={index * 100}
+                  />
+                  <span className="block text-xs md:text-sm uppercase tracking-wide text-gray-600 mt-1">
+                    {stat.label}
+                  </span>
+                </motion.div>
+              )
+            })}
+          </motion.div>
+        </div>
+      </section>
+    </>
   )
 }
