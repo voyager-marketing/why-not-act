@@ -55,9 +55,8 @@ export function HeroSection() {
               className="heading-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-white mb-8 leading-[1.1]"
               variants={fadeInUp}
             >
-              What if immigration could create{' '}
-              <span className="text-brand-400">opportunity</span>{' '}
-              instead of conflict?
+              What if INTEGRATING UNDOCUMENTED IMMIGRANTS could create {' '}
+              <span className="text-brand-400">opportunity instead of conflict?</span>
             </motion.h1>
 
             {/* Subheadline */}
