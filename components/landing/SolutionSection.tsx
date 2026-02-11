@@ -51,7 +51,7 @@ const pillars = [
   {
     icon: CheckCircle,
     number: '06',
-    title: 'Order Replaces Uncertainty',
+    title: 'Replace Uncertainty and Chaos with Order',
     description:
       'The current system is chaotic. This plan creates a predictable, accountable process where everyone knows the rules and consequences.',
   },

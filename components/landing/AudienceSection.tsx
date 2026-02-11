@@ -46,7 +46,7 @@ const audiences = [
     icon: BookOpen,
     label: 'Policymakers',
     description: 'Seeking solutions',
-    imageUrl: 'https://images.unsplash.com/photo-1541872703-74c5e44368f9?w=600&q=80',
+    imageUrl: 'https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=600&q=80',
   },
 ]
 

@@ -1,7 +1,6 @@
 'use client'
 
 import {HeroSection} from '@/components/HeroSection'
-import {SocialProof} from '@/components/SocialProof'
 import {
   NavigationBar,
   WhyWeExistSection,
@@ -12,6 +11,7 @@ import {
   AboutSection,
   GetInvolvedSection,
   FAQSection,
+  ReferencesSection,
   FooterSection,
 } from '@/components/landing'
 
@@ -39,10 +39,7 @@ export default function HomePage() {
       {/* Section 6: Who This Is For */}
       <AudienceSection />
 
-      {/* Section 7: Social Proof */}
-      <SocialProof />
-
-      {/* Section 8: About */}
+      {/* Section 7: About */}
       <AboutSection />
 
       {/* Section 9: Get Involved */}
@@ -51,7 +48,10 @@ export default function HomePage() {
       {/* Section 10: FAQs */}
       <FAQSection />
 
-      {/* Section 11: Footer */}
+      {/* Section 11: References */}
+      <ReferencesSection />
+
+      {/* Section 12: Footer */}
       <FooterSection />
     </main>
   )

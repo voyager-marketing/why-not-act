@@ -7,9 +7,9 @@ import Link from 'next/link'
 
 const navLinks = [
   {label: 'Mission', href: '#mission'},
-  {label: 'The Problem', href: '#problem'},
+  {label: 'The Challenge', href: '#problem'},
   {label: 'Solution', href: '#solution'},
-  {label: 'How It Works', href: '#how-it-works'},
+  {label: 'How This Website Works', href: '#how-it-works'},
   {label: 'About', href: '#about'},
   {label: 'FAQs', href: '#faqs'},
 ]

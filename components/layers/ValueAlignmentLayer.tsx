@@ -117,11 +117,6 @@ export default function ValueAlignmentLayer({
     }
   }
 
-  const handleContinue = () => {
-    if (canProceed) {
-      onComplete()
-    }
-  }
 
   // Loading state
   if (isLoading) {
@@ -133,7 +128,7 @@ export default function ValueAlignmentLayer({
           className="text-center mb-8"
         >
           <div className="flex items-center justify-center gap-3 mb-4">
-            <Shield className="w-10 h-10 text-purple-600" />
+            <Shield className="w-10 h-10 text-slate-700" />
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-100">
               Building Trust
             </h2>
@@ -145,7 +140,7 @@ export default function ValueAlignmentLayer({
 
         <Card className="shadow-2xl">
           <CardContent className="p-12 flex flex-col items-center justify-center gap-4">
-            <Loader2 className="w-12 h-12 text-purple-600 animate-spin" />
+            <Loader2 className="w-12 h-12 text-slate-700 animate-spin" />
             <p className="text-gray-600 dark:text-gray-400">Loading questions...</p>
           </CardContent>
         </Card>
@@ -163,7 +158,7 @@ export default function ValueAlignmentLayer({
           className="text-center mb-8"
         >
           <div className="flex items-center justify-center gap-3 mb-4">
-            <Shield className="w-10 h-10 text-purple-600" />
+            <Shield className="w-10 h-10 text-slate-700" />
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-100">
               Building Trust
             </h2>
@@ -202,7 +197,7 @@ export default function ValueAlignmentLayer({
           className="text-center mb-8"
         >
           <div className="flex items-center justify-center gap-3 mb-4">
-            <Shield className="w-10 h-10 text-purple-600" />
+            <Shield className="w-10 h-10 text-slate-700" />
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-100">
               Building Trust
             </h2>
@@ -233,7 +228,7 @@ export default function ValueAlignmentLayer({
         className="text-center mb-8"
       >
         <div className="flex items-center justify-center gap-3 mb-4">
-          <Shield className="w-10 h-10 text-purple-600" />
+          <Shield className="w-10 h-10 text-slate-700" />
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-100">
             Building Trust
           </h2>
@@ -250,19 +245,19 @@ export default function ValueAlignmentLayer({
           animate={{opacity: 1, scale: 1}}
           className="mb-6"
         >
-          <Card className="bg-gradient-to-r from-purple-50 to-blue-50 dark:from-gray-800 dark:to-gray-800">
+          <Card className="bg-slate-50 dark:bg-slate-900">
             <CardContent className="p-6">
               <div className="flex items-center justify-between mb-3">
                 <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
                   Value Alignment Score
                 </span>
-                <span className="text-2xl font-bold text-purple-600">
+                <span className="text-2xl font-bold text-slate-700">
                   {yesPercentage}%
                 </span>
               </div>
               <Progress value={yesPercentage} className="h-3" />
               {yesPercentage >= 66 ? (
-                <p className="text-sm text-green-600 dark:text-green-400 mt-3 flex items-center gap-2">
+                <p className="text-sm text-slate-700 dark:text-slate-300 mt-3 flex items-center gap-2">
                   <CheckCircle2 className="w-4 h-4" />
                   Great! We share common ground. Let's continue.
                 </p>
@@ -287,7 +282,7 @@ export default function ValueAlignmentLayer({
           transition={{duration: 0.3}}
         >
           <Card className="shadow-2xl">
-            <CardHeader className="bg-gradient-to-r from-purple-50 to-blue-50 dark:from-gray-800 dark:to-gray-800 pb-6">
+            <CardHeader className="bg-slate-50 dark:bg-slate-900 pb-6">
               <div className="text-sm text-gray-500 dark:text-gray-400 mb-2">
                 Question {currentQuestionIndex + 1} of {questions.length}
               </div>
@@ -306,10 +301,10 @@ export default function ValueAlignmentLayer({
                   <Button
                     onClick={() => handleAnswer('yes')}
                     size="lg"
-                    className="w-full h-32 flex flex-col gap-3 bg-green-500 hover:bg-green-600 text-white border-0 shadow-lg"
+                    className="w-full h-24 flex items-center justify-center gap-5 bg-green-700 hover:bg-green-800 text-white border-0 shadow-lg dark:bg-green-800 dark:hover:bg-green-700 [&_svg]:size-auto"
                   >
-                    <CheckCircle2 className="w-16 h-16" />
-                    <span className="text-2xl font-bold">Yes</span>
+                    <CheckCircle2 className="w-14 h-14" />
+                    <span className="text-3xl font-bold">Yes</span>
                   </Button>
                 </motion.div>
 
@@ -320,10 +315,10 @@ export default function ValueAlignmentLayer({
                   <Button
                     onClick={() => handleAnswer('no')}
                     size="lg"
-                    className="w-full h-32 flex flex-col gap-3 bg-red-500 hover:bg-red-600 text-white border-0 shadow-lg"
+                    className="w-full h-24 flex items-center justify-center gap-5 bg-red-700 hover:bg-red-800 text-white border-0 shadow-lg dark:bg-red-800 dark:hover:bg-red-700 [&_svg]:size-auto"
                   >
-                    <XCircle className="w-16 h-16" />
-                    <span className="text-2xl font-bold">No</span>
+                    <XCircle className="w-14 h-14" />
+                    <span className="text-3xl font-bold">No</span>
                   </Button>
                 </motion.div>
               </div>
@@ -337,16 +332,25 @@ export default function ValueAlignmentLayer({
         <motion.div
           initial={{opacity: 0, y: 20}}
           animate={{opacity: 1, y: 0}}
-          className="flex justify-center"
+          className="flex flex-col items-center gap-3"
         >
           <Button
-            onClick={handleContinue}
-            disabled={!canProceed}
+            onClick={onComplete}
             size="lg"
             className="px-12 py-6 text-xl font-bold"
           >
-            {canProceed ? 'Continue Journey' : 'Alignment Required to Continue'}
+            Continue Journey
           </Button>
+          {!canProceed && (
+            <Button
+              onClick={onComplete}
+              variant="ghost"
+              size="sm"
+              className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+            >
+              I understand, but continue anyway
+            </Button>
+          )}
         </motion.div>
       )}
     </div>

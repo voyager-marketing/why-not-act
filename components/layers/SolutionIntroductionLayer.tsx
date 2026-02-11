@@ -143,8 +143,8 @@ export default function SolutionIntroductionLayer({theme, onAnswer, onComplete}:
           animate={{opacity: 1, y: 0}}
           transition={{duration: 0.5}}
         >
-          <Card className="shadow-2xl border-2 border-purple-200 dark:border-purple-800">
-            <CardHeader className="bg-gradient-to-r from-purple-50 to-blue-50 dark:from-gray-800 dark:to-gray-800">
+          <Card className="shadow-2xl border-2 border-slate-200 dark:border-slate-700">
+            <CardHeader className="bg-slate-50 dark:bg-slate-900">
               <CardTitle className="text-3xl md:text-4xl text-center font-bold">
                 💡 The Idea Layer — "A Fair Fine"
               </CardTitle>
@@ -206,7 +206,7 @@ export default function SolutionIntroductionLayer({theme, onAnswer, onComplete}:
           transition={{duration: 0.5}}
         >
           <Card className="shadow-2xl">
-            <CardHeader className="bg-gradient-to-r from-purple-50 to-blue-50 dark:from-gray-800 dark:to-gray-800">
+            <CardHeader className="bg-slate-50 dark:bg-slate-900">
               <CardTitle className="text-2xl md:text-3xl text-center">
                 Universal Explanation of the Fine-Based Pathway
               </CardTitle>
@@ -224,8 +224,8 @@ export default function SolutionIntroductionLayer({theme, onAnswer, onComplete}:
                       className="flex items-start gap-4"
                     >
                       <div className="flex-shrink-0 mt-1">
-                        <div className="bg-green-100 dark:bg-green-900 p-2 rounded-full">
-                          <Icon className="w-5 h-5 text-green-600 dark:text-green-400" />
+                        <div className="bg-slate-100 dark:bg-slate-800 p-2 rounded-full">
+                          <Icon className="w-5 h-5 text-slate-700 dark:text-slate-300" />
                         </div>
                       </div>
                       <p className="text-lg md:text-xl text-gray-700 dark:text-gray-300 leading-relaxed">
@@ -268,7 +268,7 @@ export default function SolutionIntroductionLayer({theme, onAnswer, onComplete}:
           transition={{duration: 0.5}}
         >
           <Card className="shadow-2xl">
-            <CardHeader className="bg-gradient-to-r from-purple-50 to-blue-50 dark:from-gray-800 dark:to-gray-800">
+            <CardHeader className="bg-slate-50 dark:bg-slate-900">
               <CardTitle className="text-2xl md:text-3xl text-center">
                 Speaking to Your Values
               </CardTitle>
@@ -305,7 +305,7 @@ export default function SolutionIntroductionLayer({theme, onAnswer, onComplete}:
                       <Button
                         onClick={() => handleAnswer('yes')}
                         size="lg"
-                        className="w-full h-auto py-6 px-6 flex flex-col gap-3 bg-green-500 hover:bg-green-600 text-white"
+                        className="w-full h-auto py-6 px-6 flex flex-col gap-3 bg-green-700 hover:bg-green-800 text-white dark:bg-green-800 dark:hover:bg-green-700 [&_svg]:size-auto"
                       >
                         <CheckCircle2 className="w-10 h-10" />
                         <span className="text-lg font-bold">Yes</span>
@@ -319,7 +319,7 @@ export default function SolutionIntroductionLayer({theme, onAnswer, onComplete}:
                       <Button
                         onClick={() => handleAnswer('maybe')}
                         size="lg"
-                        className="w-full h-auto py-6 px-6 flex flex-col gap-3 bg-blue-500 hover:bg-blue-600 text-white"
+                        className="w-full h-auto py-6 px-6 flex flex-col gap-3 bg-stone-200 hover:bg-stone-300 text-stone-800 dark:bg-stone-700 dark:hover:bg-stone-600 dark:text-stone-100 [&_svg]:size-auto"
                       >
                         <ArrowRight className="w-10 h-10" />
                         <span className="text-lg font-bold">Maybe</span>
@@ -338,8 +338,8 @@ export default function SolutionIntroductionLayer({theme, onAnswer, onComplete}:
                   animate={{opacity: 1, scale: 1}}
                   className="text-center py-8"
                 >
-                  <CheckCircle2 className="w-16 h-16 text-green-600 dark:text-green-400 mx-auto mb-4" />
-                  <p className="text-xl text-green-600 dark:text-green-400 font-medium">
+                  <CheckCircle2 className="w-16 h-16 text-slate-700 dark:text-slate-300 mx-auto mb-4" />
+                  <p className="text-xl text-slate-700 dark:text-slate-300 font-medium">
                     Let's explore the impact together...
                   </p>
                 </motion.div>

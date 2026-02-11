@@ -46,7 +46,7 @@ export function HowItWorksSection() {
           variants={staggerContainer}
         >
           <motion.span className="section-label mb-4 block" variants={fadeInUp}>
-            Learn How It Works
+            How This Website Works
           </motion.span>
           <motion.h2
             className="heading-section text-3xl md:text-4xl lg:text-5xl text-navy mb-6"
@@ -55,8 +55,9 @@ export function HowItWorksSection() {
             Immigration Reform Doesn&apos;t Have to Be One-Size-Fits-All
           </motion.h2>
           <motion.p className="text-lg text-gray-600" variants={fadeInUp}>
-            Our tool helps you explore how a practical solution can work from your point of
-            view - without arguing, labeling, or oversimplifying.
+            Our tool helps you explore how a practical solution for integrating undocumented
+            immigrants can work from your point of view - without arguing, labeling, or
+            oversimplifying.
           </motion.p>
         </motion.div>
 

@@ -92,9 +92,9 @@ function FactCard({
         <CardContent className="p-8 md:p-10">
           <div className="space-y-6">
             {/* Fact Display */}
-            <div className="p-6 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-gray-800 dark:to-gray-800 rounded-lg border-l-4 border-blue-500">
+            <div className="p-6 bg-slate-50 dark:bg-slate-900 rounded-lg border-l-4 border-slate-600">
               <div className="flex items-start gap-3 mb-4">
-                <AlertCircle className="w-6 h-6 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-1" />
+                <AlertCircle className="w-6 h-6 text-slate-600 dark:text-slate-400 flex-shrink-0 mt-1" />
                 <p className="text-lg md:text-xl text-gray-900 dark:text-gray-100 font-medium leading-relaxed">
                   {lensSpecificFact}
                 </p>
@@ -133,7 +133,7 @@ function FactCard({
                 exit={{opacity: 0}}
                 className="text-center"
               >
-                <p className="text-green-600 dark:text-green-400 font-medium">
+                <p className="text-slate-700 dark:text-slate-300 font-medium">
                   {answered === 'yes'
                     ? 'Great! Knowledge is power.'
                     : 'Now you know! Keep scrolling to learn more.'}
@@ -233,7 +233,7 @@ export default function DataRealityLayer({theme, onComplete, initialFacts}: Prop
           animate={{opacity: 1}}
           className="flex flex-col items-center justify-center py-20"
         >
-          <Loader2 className="w-12 h-12 text-purple-600 animate-spin mb-4" />
+          <Loader2 className="w-12 h-12 text-slate-700 animate-spin mb-4" />
           <p className="text-gray-600 dark:text-gray-400">Loading facts...</p>
         </motion.div>
       )}
@@ -315,7 +315,7 @@ export default function DataRealityLayer({theme, onComplete, initialFacts}: Prop
           </p>
           <div className="w-full max-w-md mx-auto mt-2 h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
             <motion.div
-              className="h-full bg-blue-600 dark:bg-blue-400"
+              className="h-full bg-slate-700 dark:bg-slate-400"
               initial={{width: 0}}
               animate={{width: `${(answeredFacts.size / facts.length) * 100}%`}}
               transition={{duration: 0.5}}
@@ -332,7 +332,7 @@ export default function DataRealityLayer({theme, onComplete, initialFacts}: Prop
           transition={{duration: 0.8, delay: 0.3}}
           className="max-w-3xl mx-auto mb-12"
         >
-          <Card className="shadow-xl bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 dark:from-gray-800 dark:via-gray-800 dark:to-gray-800 border-2 border-blue-200 dark:border-blue-800">
+          <Card className="shadow-xl bg-slate-50 dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-700">
             <CardContent className="p-8 md:p-12">
               <p className="text-xl md:text-2xl text-gray-900 dark:text-gray-100 leading-relaxed text-center font-medium">
                 So if mass deportation costs more than it saves, what if there's a better way? Imagine a solution that rewards honesty, generates billions in revenue, and restores order, without tearing families apart.

@@ -14,7 +14,7 @@ const footerLinks = {
   legal: [
     {label: 'Privacy Policy', href: '/privacy'},
     {label: 'Terms of Service', href: '/terms'},
-    {label: 'Contact', href: '/contact'},
+    {label: 'Contact', href: 'mailto:info@whynotact.org'},
   ],
 }
 
@@ -65,8 +65,17 @@ export function FooterSection() {
                 A nonpartisan nonprofit dedicated to exploring practical, humane, and economically
                 sound solutions to immigration.
               </p>
-              <p className="text-sm text-brand-400 font-bold uppercase tracking-wide">
+              <p className="text-sm text-brand-400 font-bold uppercase tracking-wide mb-4">
                 Powered by data and empathy.
+              </p>
+              <p className="text-gray-400 text-sm">
+                Contact us:{' '}
+                <a
+                  href="mailto:info@whynotact.org"
+                  className="text-brand-400 hover:text-brand-300 underline"
+                >
+                  info@whynotact.org
+                </a>
               </p>
             </div>
 

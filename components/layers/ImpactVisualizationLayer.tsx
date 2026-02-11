@@ -257,7 +257,7 @@ export default function ImpactVisualizationLayer({onComplete}: Props) {
       <div className="max-w-4xl mx-auto">
         <Card className="shadow-2xl">
           <CardContent className="p-12 flex flex-col items-center justify-center gap-4">
-            <Loader2 className="w-12 h-12 text-purple-600 animate-spin" />
+            <Loader2 className="w-12 h-12 text-slate-700 animate-spin" />
             <p className="text-gray-600 dark:text-gray-400">Loading impact data...</p>
           </CardContent>
         </Card>
@@ -321,7 +321,7 @@ export default function ImpactVisualizationLayer({onComplete}: Props) {
         transition={{duration: 0.6, delay: 0.6}}
         className="mb-12"
       >
-          <Card className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-gray-800 dark:to-gray-800 shadow-xl">
+          <Card className="bg-slate-50 dark:bg-slate-900 shadow-xl">
             <CardContent className="p-10">
               <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6 text-center">
                 Reflection
@@ -335,7 +335,7 @@ export default function ImpactVisualizationLayer({onComplete}: Props) {
                   <Button
                     onClick={() => handleReflectionResponse('yes')}
                     size="lg"
-                    className="px-8 py-6 text-lg font-semibold bg-green-600 hover:bg-green-700"
+                    className="px-8 py-6 text-lg font-semibold bg-green-700 hover:bg-green-800 text-white dark:bg-green-800 dark:hover:bg-green-700"
                   >
                     Yes
                   </Button>
@@ -371,7 +371,7 @@ export default function ImpactVisualizationLayer({onComplete}: Props) {
           transition={{delay: 0.3}}
           className="mb-12"
         >
-          <Card className="bg-gradient-to-r from-purple-50 to-pink-50 dark:from-gray-800 dark:to-gray-800 shadow-xl">
+          <Card className="bg-stone-100 dark:bg-stone-800 shadow-xl">
             <CardContent className="p-10 text-center">
               <p className="text-xl text-gray-800 dark:text-gray-200 mb-6 leading-relaxed">
                 Across the political spectrum, one thing becomes clear: We can't afford the cost
@@ -396,7 +396,7 @@ export default function ImpactVisualizationLayer({onComplete}: Props) {
           <Button
             onClick={onComplete}
             size="lg"
-            className="px-12 py-6 text-xl font-bold shadow-2xl bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700"
+            className="px-12 py-6 text-xl font-bold shadow-2xl hover:shadow-3xl transition-all duration-300"
           >
             Continue to Reflection
             <ArrowRight className="ml-2 w-6 h-6" />

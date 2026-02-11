@@ -258,6 +258,29 @@ ${data.email ? `Email: ${data.email}` : ''}`
             </CardHeader>
           </Card>
 
+          {/* Downloadable Form Letter */}
+          <Card className="border-2 border-dashed border-purple-300 bg-purple-50/50">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Download className="w-5 h-5 text-purple-600" />
+                Download Form Letter
+              </CardTitle>
+              <CardDescription>
+                A pre-written form letter you can print, sign, and mail to your representative.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Button disabled variant="outline" className="w-full">
+                <Download className="w-4 h-4 mr-2" />
+                Download Form Letter (Coming Soon)
+              </Button>
+              <p className="text-xs text-gray-500 mt-2 text-center">
+                The downloadable form letter will be available shortly. In the meantime, you can generate a
+                personalized letter using the form below.
+              </p>
+            </CardContent>
+          </Card>
+
           {/* Letter Template Preview */}
           <Card>
             <CardHeader>

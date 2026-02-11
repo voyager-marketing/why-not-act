@@ -1,19 +1,11 @@
 'use client'
 
 import {Button} from '@/components/ui/button'
-import {ArrowRight, Users, MapPin, TrendingUp, Shield} from 'lucide-react'
+import {ArrowRight} from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import {motion} from 'framer-motion'
-import {AnimatedCounter} from '@/components/AnimatedCounter'
 import {fadeInUp, staggerContainer} from '@/lib/animations'
-
-const stats = [
-  {value: '12,847', label: 'Americans Engaged', icon: Users},
-  {value: '50', label: 'States Represented', icon: MapPin},
-  {value: '87%', label: 'Found Common Ground', icon: TrendingUp},
-  {value: '100%', label: 'Anonymous & Secure', icon: Shield},
-]
 
 export function HeroSection() {
   return (
@@ -119,39 +111,8 @@ export function HeroSection() {
         />
       </section>
 
-      {/* Stats Bar */}
-      <section className="bg-white border-b-4 border-brand-600">
-        <div className="container mx-auto">
-          <motion.div
-            className="grid grid-cols-2 md:grid-cols-4"
-            initial="hidden"
-            whileInView="visible"
-            viewport={{once: true, margin: '-50px'}}
-            variants={staggerContainer}
-          >
-            {stats.map((stat, index) => {
-              const Icon = stat.icon
-              return (
-                <motion.div
-                  key={index}
-                  className="py-8 px-6 text-center border-r border-gray-200 last:border-r-0"
-                  variants={fadeInUp}
-                >
-                  <Icon className="w-6 h-6 mx-auto mb-2 text-brand-600" />
-                  <AnimatedCounter
-                    value={stat.value}
-                    className="block text-3xl md:text-4xl font-bold text-navy"
-                    delay={index * 100}
-                  />
-                  <span className="block text-xs md:text-sm uppercase tracking-wide text-gray-600 mt-1">
-                    {stat.label}
-                  </span>
-                </motion.div>
-              )
-            })}
-          </motion.div>
-        </div>
-      </section>
+      {/* Divider */}
+      <div className="bg-white border-b-4 border-brand-600" />
     </>
   )
 }

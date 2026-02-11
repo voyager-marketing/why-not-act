@@ -79,7 +79,7 @@ export default function ReflectionPersuasionLayer({
         className="text-center mb-8"
       >
         <div className="flex items-center justify-center gap-3 mb-6">
-          <Heart className="w-10 h-10 text-pink-500 animate-pulse" />
+          <Heart className="w-10 h-10 text-rose-700" />
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-100">
             A Moment of Reflection
           </h2>
@@ -95,7 +95,7 @@ export default function ReflectionPersuasionLayer({
             animate={{opacity: 1, y: 0}}
             transition={{duration: 0.8, delay: 0.4}}
           >
-            <Card className="shadow-2xl border-2 border-blue-200 dark:border-blue-800">
+            <Card className="shadow-2xl border-2 border-slate-200 dark:border-slate-700">
               <CardContent className="p-8 md:p-12 space-y-6">
                 {/* Opening Statement */}
                 <motion.h3
@@ -121,7 +121,7 @@ export default function ReflectionPersuasionLayer({
                   initial={{opacity: 0, x: -20}}
                   animate={{opacity: 1, x: 0}}
                   transition={{delay: 1.0}}
-                  className="p-6 bg-gradient-to-r from-red-50 to-pink-50 dark:from-red-900/20 dark:to-pink-900/20 rounded-lg border-l-4 border-red-500"
+                  className="p-6 bg-stone-100 dark:bg-stone-800 rounded-lg border-l-4 border-rose-700"
                 >
                   <p className="text-gray-800 dark:text-gray-200 font-semibold mb-2">
                     If you lean conservative
@@ -136,7 +136,7 @@ export default function ReflectionPersuasionLayer({
                   initial={{opacity: 0, x: 20}}
                   animate={{opacity: 1, x: 0}}
                   transition={{delay: 1.2}}
-                  className="p-6 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-lg border-l-4 border-blue-500"
+                  className="p-6 bg-stone-100 dark:bg-stone-800 rounded-lg border-l-4 border-slate-700"
                 >
                   <p className="text-gray-800 dark:text-gray-200 font-semibold mb-2">
                     If you lean progressive
@@ -151,7 +151,7 @@ export default function ReflectionPersuasionLayer({
                   initial={{opacity: 0, y: 20}}
                   animate={{opacity: 1, y: 0}}
                   transition={{delay: 1.4}}
-                  className="p-6 bg-gradient-to-r from-purple-50 to-indigo-50 dark:from-purple-900/20 dark:to-indigo-900/20 rounded-lg border-2 border-purple-300 dark:border-purple-700"
+                  className="p-6 bg-slate-50 dark:bg-slate-900 rounded-lg border-2 border-slate-300 dark:border-slate-600"
                 >
                   <p className="text-gray-800 dark:text-gray-200 font-bold text-xl mb-3">
                     Here's the truth:
@@ -193,7 +193,7 @@ export default function ReflectionPersuasionLayer({
                     onClick={handleReadyForAction}
                     size="lg"
                     disabled={readyForAction}
-                    className="w-full h-16 text-xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white shadow-lg hover:shadow-xl transition-all duration-300"
+                    className="w-full h-16 text-xl font-bold text-white bg-green-700 hover:bg-green-800 dark:bg-green-800 dark:hover:bg-green-700 shadow-lg hover:shadow-xl transition-all duration-300"
                   >
                     {readyForAction ? (
                       <span>Loading...</span>

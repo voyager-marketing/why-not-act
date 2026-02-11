@@ -1,8 +1,9 @@
 'use client'
 
-import {useState, useMemo, useEffect} from 'react'
+import {useState, useMemo, useEffect, useRef} from 'react'
 import {useRouter} from 'next/navigation'
 import {motion, AnimatePresence} from 'framer-motion'
+import {usePostHog} from 'posthog-js/react'
 import type {Theme, Answer} from '@/types/form'
 import {useFormStore} from '@/lib/formStore'
 import {useJourneyStore} from '@/lib/journeyStore'
@@ -39,17 +40,22 @@ export default function JourneyWizard({theme}: Props) {
   const [currentLayerIndex, setCurrentLayerIndex] = useState(0)
   const [layerAnswers, setLayerAnswers] = useState<Record<string, Answer>>({})
   const [completedLayers, setCompletedLayers] = useState<Set<number>>(new Set())
+  const layerStartTime = useRef(Date.now())
   const router = useRouter()
+  const posthog = usePostHog()
   const {setAnswer} = useFormStore()
   const {setLens} = useJourneyStore()
 
   const currentLayer = LAYERS[currentLayerIndex]
   const progress = ((currentLayerIndex + 1) / LAYERS.length) * 100
 
-  // Initialize journey store with political lens
+  // Initialize journey store with political lens and track journey start
   useEffect(() => {
     setLens(theme as any) // Cast to match PoliticalLens type
-  }, [theme, setLens])
+    posthog.capture('journey_started', {
+      political_lens: theme,
+    })
+  }, [theme, setLens, posthog])
 
   // Calculate persuasion score based on all answers
   const persuasionScore = useMemo(() => {
@@ -69,13 +75,37 @@ export default function JourneyWizard({theme}: Props) {
     const answerId = `layer-${currentLayerIndex}-${Object.keys(layerAnswers).length}`
     setLayerAnswers((prev) => ({...prev, [answerId]: answer}))
     setAnswer(currentLayerIndex, answer)
+
+    posthog.capture('question_answered', {
+      layer_name: currentLayer,
+      layer_number: currentLayerIndex + 1,
+      question_index: Object.keys(layerAnswers).length,
+      answer,
+      political_lens: theme,
+    })
   }
 
   const handleLayerComplete = () => {
+    const timeOnLayer = Math.round((Date.now() - layerStartTime.current) / 1000)
+
+    posthog.capture('layer_completed', {
+      layer_number: currentLayerIndex + 1,
+      layer_name: currentLayer,
+      political_lens: theme,
+      time_on_layer_seconds: timeOnLayer,
+    })
+
     setCompletedLayers((prev) => new Set(prev).add(currentLayerIndex))
 
     if (currentLayerIndex < LAYERS.length - 1) {
       setCurrentLayerIndex(currentLayerIndex + 1)
+      layerStartTime.current = Date.now()
+    } else {
+      posthog.capture('journey_completed', {
+        political_lens: theme,
+        persuasion_score: persuasionScore,
+        total_answers: Object.keys(layerAnswers).length,
+      })
     }
   }
 
@@ -89,29 +119,14 @@ export default function JourneyWizard({theme}: Props) {
     router.push('/')
   }
 
-  const themeColors: Record<Theme, string> = {
-    'far-left': 'from-blue-600 to-blue-700',
-    'center-left': 'from-blue-400 to-blue-500',
-    'center-right': 'from-red-400 to-red-500',
-    'far-right': 'from-red-600 to-red-700',
-  }
-
-  const themeGradient = themeColors[theme] || 'from-purple-600 to-blue-600'
-
   return (
-    <main className="min-h-screen relative overflow-hidden">
-      {/* Background Gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-100 dark:from-gray-900 dark:via-purple-900/20 dark:to-gray-900" />
-
-      {/* Animated Background Circles */}
-      <div className="absolute top-0 right-0 w-96 h-96 bg-purple-200/20 rounded-full blur-3xl" />
-      <div className="absolute bottom-0 left-0 w-96 h-96 bg-blue-200/20 rounded-full blur-3xl" />
-
+    <main className="min-h-screen relative bg-stone-50 dark:bg-stone-950">
       <div className="relative z-10 container mx-auto px-4 py-8 md:py-16 max-w-6xl min-h-screen">
         {/* Header */}
         <motion.div
-          initial={{opacity: 0, y: -20}}
-          animate={{opacity: 1, y: 0}}
+          initial={{opacity: 0}}
+          animate={{opacity: 1}}
+          transition={{duration: 0.3}}
           className="mb-8"
         >
           {/* Navigation */}
@@ -135,16 +150,21 @@ export default function JourneyWizard({theme}: Props) {
                 Back
               </Button>
             )}
-            <Badge variant="secondary" className="capitalize">
-              {theme.replace('-', ' ')}
-            </Badge>
+            <Button
+              onClick={() => router.push('/')}
+              variant="ghost"
+              className="flex items-center gap-2"
+            >
+              <Home className="w-4 h-4" />
+              Back to Website
+            </Button>
           </div>
 
           {/* Progress Bar */}
-          <Card className="p-6 shadow-lg">
+          <Card className="p-6">
             <div className="flex justify-between items-center mb-3">
               <div className="flex items-center gap-2">
-                <Layers className="w-5 h-5 text-purple-600" />
+                <Layers className="w-5 h-5 text-slate-600 dark:text-slate-400" />
                 <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
                   Layer {currentLayerIndex + 1} of {LAYERS.length}:{' '}
                   {LAYER_NAMES[currentLayer]}
@@ -154,33 +174,27 @@ export default function JourneyWizard({theme}: Props) {
                 {Math.round(progress)}%
               </span>
             </div>
-            <Progress value={progress} className="h-3" />
+            <Progress value={progress} className="h-2" />
 
             {/* Layer Pills */}
             <div className="flex flex-wrap gap-2 mt-4">
               {LAYERS.map((layer, idx) => (
-                <motion.div
+                <Badge
                   key={layer}
-                  initial={{opacity: 0, scale: 0.8}}
-                  animate={{opacity: 1, scale: 1}}
-                  transition={{delay: idx * 0.05}}
+                  variant={
+                    idx === currentLayerIndex
+                      ? 'default'
+                      : completedLayers.has(idx)
+                        ? 'secondary'
+                        : 'outline'
+                  }
+                  className={`
+                    ${idx === currentLayerIndex ? 'bg-slate-700 text-white dark:bg-slate-300 dark:text-slate-900' : ''}
+                    ${completedLayers.has(idx) ? 'bg-slate-100 text-slate-700 dark:bg-slate-700 dark:text-slate-200' : ''}
+                  `}
                 >
-                  <Badge
-                    variant={
-                      idx === currentLayerIndex
-                        ? 'default'
-                        : completedLayers.has(idx)
-                          ? 'secondary'
-                          : 'outline'
-                    }
-                    className={`
-                      ${idx === currentLayerIndex ? 'bg-purple-600 text-white' : ''}
-                      ${completedLayers.has(idx) ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100' : ''}
-                    `}
-                  >
-                    {LAYER_NAMES[layer]}
-                  </Badge>
-                </motion.div>
+                  {LAYER_NAMES[layer]}
+                </Badge>
               ))}
             </div>
           </Card>
@@ -206,16 +220,6 @@ export default function JourneyWizard({theme}: Props) {
           </motion.div>
         </AnimatePresence>
 
-        {/* Persuasion Score Indicator (for debugging/transparency) */}
-        {process.env.NODE_ENV === 'development' && (
-          <div className="fixed bottom-4 right-4 bg-white dark:bg-gray-800 p-4 rounded-lg shadow-lg border">
-            <div className="text-xs text-gray-500 mb-1">Persuasion Score</div>
-            <div className="text-2xl font-bold text-purple-600">{persuasionScore}%</div>
-            <div className="text-xs text-gray-400 mt-1">
-              {Object.keys(layerAnswers).length} answers
-            </div>
-          </div>
-        )}
       </div>
     </main>
   )

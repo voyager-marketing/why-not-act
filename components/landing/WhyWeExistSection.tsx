@@ -1,7 +1,7 @@
 'use client'
 
 import {motion} from 'framer-motion'
-import {X, ArrowRight} from 'lucide-react'
+import {X} from 'lucide-react'
 import {fadeInUp, staggerContainer} from '@/lib/animations'
 
 export function WhyWeExistSection() {
@@ -66,7 +66,8 @@ export function WhyWeExistSection() {
                     </h3>
                     <p className="text-gray-600">
                       The status quo helps no one. Political gridlock leaves
-                      millions in limbo.
+                      millions in limbo and is causing the Nation to miss out on
+                      a great opportunity!
                     </p>
                   </div>
                 </div>
@@ -80,7 +81,7 @@ export function WhyWeExistSection() {
             variants={fadeInUp}
           >
             Meanwhile, millions of undocumented immigrants live in fear,
-            businesses lack workers, border communities struggle, and political
+            businesses lack workers, communities struggle, and political
             division deepens.
           </motion.p>
 
@@ -127,9 +128,8 @@ export function WhyWeExistSection() {
               <p className="text-xl md:text-2xl font-medium text-navy mb-4">
                 Our approach starts with something simple:
               </p>
-              <p className="text-2xl md:text-3xl font-bold text-brand-600 flex items-center gap-3">
+              <p className="text-2xl md:text-3xl font-bold text-brand-600">
                 Listening
-                <ArrowRight className="w-6 h-6" />
               </p>
             </div>
           </motion.div>
