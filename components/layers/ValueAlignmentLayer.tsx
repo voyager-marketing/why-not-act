@@ -8,8 +8,6 @@ import {Card, CardContent, CardHeader, CardTitle} from '@/components/ui/card'
 import {Button} from '@/components/ui/button'
 import {CheckCircle2, XCircle, Shield, AlertCircle, Loader2} from 'lucide-react'
 import {Progress} from '@/components/ui/progress'
-import {client} from '@/lib/sanity.client'
-
 interface ValueQuestion {
   id: string
   text: Record<Theme, string>
@@ -22,19 +20,14 @@ interface Props {
   answers: Record<string, Answer>
 }
 
-// Fetcher function for questions
+// Fetcher function for questions (via API route to avoid CORS issues)
 const fetchLayer2Questions = async (): Promise<ValueQuestion[]> => {
-  const query = `*[_type == "layeredQuestion" && layer == "layer2"] | order(order asc) {
-    _id,
-    "id": _id,
-    coreQuestion,
-    farRightFraming,
-    centerRightFraming,
-    centerLeftFraming,
-    farLeftFraming
-  }`
-
-  const sanityQuestions: LayeredQuestion[] = await client.fetch(query)
+  const res = await fetch('/api/questions?layer=layer2')
+  if (!res.ok) {
+    throw new Error(`Failed to fetch questions: ${res.status}`)
+  }
+  const data = await res.json()
+  const sanityQuestions: LayeredQuestion[] = data.questions
 
   // Transform Sanity data to match ValueQuestion interface
   return sanityQuestions.map((q) => ({

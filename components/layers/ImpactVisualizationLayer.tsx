@@ -7,7 +7,6 @@ import {Card, CardContent} from '@/components/ui/card'
 import {Button} from '@/components/ui/button'
 import {ArrowRight, Loader2} from 'lucide-react'
 import {useJourneyStore} from '@/lib/journeyStore'
-import {client} from '@/lib/sanity.client'
 import type {ImpactPoint} from '@/types/sanity'
 
 interface Props {
@@ -26,18 +25,14 @@ interface LensImpacts {
   reflectionQuestion: string
 }
 
-// Fetch impact points from Sanity
+// Fetch impact points via API route to avoid CORS issues
 const fetchImpactPoints = async (lens: PoliticalLens): Promise<LensImpacts | null> => {
-  const query = `*[_type == "impactPoint" && lens == $lens] | order(order asc) {
-    _id,
-    emoji,
-    title,
-    description,
-    reflectionQuestion,
-    order
-  }`
-
-  const impactPoints: ImpactPoint[] = await client.fetch(query, {lens})
+  const res = await fetch(`/api/impact-points?lens=${encodeURIComponent(lens)}`)
+  if (!res.ok) {
+    throw new Error(`Failed to fetch impact points: ${res.status}`)
+  }
+  const data = await res.json()
+  const impactPoints: ImpactPoint[] = data.impactPoints
 
   if (impactPoints.length === 0) return null
 
