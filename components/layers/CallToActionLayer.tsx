@@ -17,6 +17,7 @@ import {
   Star,
   Clock,
   Home,
+  Check,
 } from 'lucide-react'
 
 interface ActionCard {
@@ -27,7 +28,13 @@ interface ActionCard {
   priority: number
   minScore: number
   buttonText: string
-  color: string
+  colorClasses: {
+    iconBg: string
+    button: string
+    buttonHover: string
+    ring: string
+    border: string
+  }
   action: string
   comingSoon?: boolean
 }
@@ -40,8 +47,14 @@ const ACTIONS: ActionCard[] = [
     description: 'Get updates on immigration reform legislation and how you can help.',
     priority: 1,
     minScore: 0,
-    buttonText: 'Join the Movement',
-    color: 'purple',
+    buttonText: 'Send Us an Email',
+    colorClasses: {
+      iconBg: 'bg-purple-600',
+      button: 'bg-purple-600 hover:bg-purple-700',
+      buttonHover: 'hover:bg-purple-700',
+      ring: 'ring-purple-400',
+      border: 'border-t-4 border-t-purple-500',
+    },
     action: 'signup',
   },
   {
@@ -52,7 +65,13 @@ const ACTIONS: ActionCard[] = [
     priority: 2,
     minScore: 50,
     buttonText: 'Share Now',
-    color: 'blue',
+    colorClasses: {
+      iconBg: 'bg-blue-600',
+      button: 'bg-blue-600 hover:bg-blue-700',
+      buttonHover: 'hover:bg-blue-700',
+      ring: 'ring-blue-400',
+      border: 'border-t-4 border-t-blue-500',
+    },
     action: 'share',
   },
   {
@@ -63,7 +82,13 @@ const ACTIONS: ActionCard[] = [
     priority: 3,
     minScore: 70,
     buttonText: 'Download Letter',
-    color: 'green',
+    colorClasses: {
+      iconBg: 'bg-emerald-600',
+      button: 'bg-emerald-600 hover:bg-emerald-700',
+      buttonHover: 'hover:bg-emerald-700',
+      ring: 'ring-emerald-400',
+      border: 'border-t-4 border-t-emerald-500',
+    },
     action: 'contact',
   },
   {
@@ -74,7 +99,13 @@ const ACTIONS: ActionCard[] = [
     priority: 4,
     minScore: 80,
     buttonText: 'Get Started',
-    color: 'amber',
+    colorClasses: {
+      iconBg: 'bg-amber-500',
+      button: 'bg-amber-500 hover:bg-amber-600',
+      buttonHover: 'hover:bg-amber-600',
+      ring: 'ring-amber-400',
+      border: 'border-t-4 border-t-amber-500',
+    },
     action: 'organize',
   },
   {
@@ -85,7 +116,13 @@ const ACTIONS: ActionCard[] = [
     priority: 5,
     minScore: 90,
     buttonText: 'Coming Soon',
-    color: 'pink',
+    colorClasses: {
+      iconBg: 'bg-rose-600',
+      button: 'bg-rose-600 hover:bg-rose-700',
+      buttonHover: 'hover:bg-rose-700',
+      ring: 'ring-rose-400',
+      border: 'border-t-4 border-t-rose-500',
+    },
     action: 'donate',
     comingSoon: true,
   },
@@ -104,12 +141,17 @@ interface Props {
 
 export default function CallToActionLayer({theme, persuasionScore}: Props) {
   const [selectedAction, setSelectedAction] = useState<string | null>(null)
+  const [copied, setCopied] = useState(false)
   const posthog = usePostHog()
 
   // Show all actions, sorted by priority
   const availableActions = ACTIONS.sort((a, b) => a.priority - b.priority)
 
-  const handleActionClick = (action: ActionCard) => {
+  const getShareUrl = () => {
+    return `${window.location.origin}/journey/${theme}`
+  }
+
+  const handleActionClick = async (action: ActionCard) => {
     if (action.comingSoon) return
     setSelectedAction(action.id)
 
@@ -121,29 +163,46 @@ export default function CallToActionLayer({theme, persuasionScore}: Props) {
     })
     switch (action.id) {
       case 'email-signup': {
-        window.location.href = 'mailto:info@whynotact.org'
+        window.location.href = 'mailto:info@whynotact.org?subject=I want to stay informed about immigration reform'
         break
       }
-      case 'share':
+      case 'share': {
+        const shareUrl = getShareUrl()
         if (navigator.share) {
-          navigator.share({
-            title: 'Immigration Reform That Works',
-            text: 'I just learned about a comprehensive immigration reform approach. See how it would change everything.',
-            url: window.location.origin,
-          })
+          try {
+            await navigator.share({
+              title: 'Why Not Act - Immigration Reform That Works',
+              text: 'I just learned about a comprehensive immigration reform approach. Take the quiz and see where you stand.',
+              url: shareUrl,
+            })
+          } catch {
+            // User cancelled or share failed, fall back to copy
+            await navigator.clipboard.writeText(shareUrl)
+            setCopied(true)
+            setTimeout(() => setCopied(false), 2000)
+          }
+        } else {
+          await navigator.clipboard.writeText(shareUrl)
+          setCopied(true)
+          setTimeout(() => setCopied(false), 2000)
         }
         break
-      case 'contact':
-        // Download the form letter
-        window.open('/Form letter to present elected officials.docx', '_blank')
+      }
+      case 'contact-rep': {
+        // Trigger a proper file download
+        const link = document.createElement('a')
+        link.href = '/Form letter to present elected officials.docx'
+        link.download = 'Form letter to present elected officials.docx'
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
         break
+      }
       case 'organize':
         window.open('/organize', '_blank')
         break
     }
   }
-
-  // Unused colorClasses removed - all actions use civic palette
 
   return (
     <div className="space-y-8">
@@ -212,6 +271,7 @@ export default function CallToActionLayer({theme, persuasionScore}: Props) {
       <div className="flex flex-wrap justify-center gap-6">
         {availableActions.map((action, idx) => {
           const Icon = action.icon
+          const isShare = action.id === 'share'
           return (
             <motion.div
               key={action.id}
@@ -223,14 +283,14 @@ export default function CallToActionLayer({theme, persuasionScore}: Props) {
               whileTap={{scale: 0.98}}
             >
               <Card
-                className={`shadow-xl hover:shadow-2xl transition-all h-full ${
+                className={`shadow-xl hover:shadow-2xl transition-all h-full ${action.colorClasses.border} ${
                   action.comingSoon ? 'opacity-60 cursor-default' : 'cursor-pointer'
-                } ${selectedAction === action.id ? 'ring-4 ring-slate-400' : ''}`}
+                } ${selectedAction === action.id ? `ring-4 ${action.colorClasses.ring}` : ''}`}
                 onClick={() => !action.comingSoon && handleActionClick(action)}
               >
                 <CardContent className="p-6 flex flex-col h-full">
                   <div
-                    className="bg-slate-800 dark:bg-slate-700 w-14 h-14 rounded-full flex items-center justify-center mb-4"
+                    className={`${action.colorClasses.iconBg} w-14 h-14 rounded-full flex items-center justify-center mb-4`}
                   >
                     <Icon className="w-7 h-7 text-white" />
                   </div>
@@ -245,14 +305,21 @@ export default function CallToActionLayer({theme, persuasionScore}: Props) {
 
                   <Button
                     disabled={action.comingSoon}
-                    className="w-full bg-slate-800 hover:bg-slate-900 dark:bg-slate-700 dark:hover:bg-slate-600 text-white font-bold"
+                    className={`w-full ${action.colorClasses.button} text-white font-bold`}
                     onClick={(e) => {
                       e.stopPropagation()
                       if (!action.comingSoon) handleActionClick(action)
                     }}
                   >
                     {action.comingSoon && <Clock className="w-4 h-4 mr-2" />}
-                    {action.buttonText}
+                    {isShare && copied ? (
+                      <>
+                        <Check className="w-4 h-4 mr-2" />
+                        Link Copied!
+                      </>
+                    ) : (
+                      action.buttonText
+                    )}
                   </Button>
                 </CardContent>
               </Card>
