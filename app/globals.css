@@ -69,6 +69,7 @@
   /* Typography & Fonts */
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-accent: var(--font-accent);
 
   /* Border Radius */
   --radius-sm: calc(var(--radius) - 4px);
@@ -543,6 +544,7 @@ button, a, input, select, textarea {
 
 /* Typography - Bold, Authoritative */
 .section-label {
+  font-family: var(--font-accent), sans-serif;
   font-size: 0.75rem;
   font-weight: 700;
   text-transform: uppercase;
@@ -561,6 +563,11 @@ button, a, input, select, textarea {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.025em;
+}
+
+/* Accent font utility */
+.font-accent {
+  font-family: var(--font-accent), sans-serif;
 }
 
 /* Angled Section Dividers */

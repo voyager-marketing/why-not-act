@@ -175,10 +175,10 @@ export function SolutionSection() {
           >
             <div className="bg-brand-600 p-10 md:p-16">
               <div className="max-w-4xl mx-auto text-center">
-                <span className="text-white/80 text-sm md:text-base font-bold uppercase tracking-wider block mb-4">
+                <span className="text-white/80 text-sm md:text-base font-bold uppercase tracking-wider block mb-4 font-accent">
                   The Bottom Line
                 </span>
-                <div className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-white mb-6">
+                <div className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-white mb-6 font-accent">
                   $315B+
                 </div>
                 <p className="text-xl md:text-2xl text-white/90 mb-4">

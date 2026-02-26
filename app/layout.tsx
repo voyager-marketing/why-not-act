@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { Geist, Geist_Mono } from "next/font/google";
+import localFont from "next/font/local";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import { PostHogProvider } from "@/lib/posthog";
 import PostHogPageView from "@/lib/posthog-pageview";
@@ -14,6 +15,12 @@ const geistSans = Geist({
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+});
+
+const bitcheese = localFont({
+  src: "../public/Bitcheese.otf",
+  variable: "--font-accent",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -72,7 +79,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${bitcheese.variable} antialiased`}
       >
         <PostHogProvider>
           <Suspense fallback={null}>
