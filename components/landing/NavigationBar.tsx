@@ -3,6 +3,7 @@
 import {useState} from 'react'
 import {Menu, X, ArrowRight} from 'lucide-react'
 import {Button} from '@/components/ui/button'
+import Image from 'next/image'
 import Link from 'next/link'
 
 const navLinks = [
@@ -30,19 +31,24 @@ export function NavigationBar() {
       <nav className="bg-navy text-white sticky top-0 z-50">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-16 md:h-20">
-            {/* Logo */}
+            {/* Logo + Tagline */}
             <Link href="/" className="flex items-center gap-3">
-              <div className="w-10 h-10 md:w-12 md:h-12 bg-brand-600 flex items-center justify-center">
-                <span className="text-white font-bold text-lg md:text-xl">W</span>
-              </div>
-              <div className="hidden sm:block">
-                <span className="font-bold text-lg uppercase tracking-wide block leading-tight">
-                  WhyNotAct
-                </span>
-                <span className="text-xs text-gray-400 uppercase tracking-widest">
-                  .org
-                </span>
-              </div>
+              <Image
+                src="/WNA-Final Logo.png"
+                alt="WhyNotAct.org"
+                width={160}
+                height={48}
+                className="h-10 md:h-12 w-auto"
+                priority
+              />
+              <Image
+                src="/tag line.jpg"
+                alt="Tagline"
+                width={200}
+                height={48}
+                className="h-8 md:h-10 w-auto hidden sm:block"
+                priority
+              />
             </Link>
 
             {/* Desktop Navigation */}

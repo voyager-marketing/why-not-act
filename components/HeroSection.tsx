@@ -51,6 +51,17 @@ export function HeroSection() {
               <span className="text-brand-400">opportunity instead of conflict?</span>
             </motion.h1>
 
+            {/* Tagline */}
+            <motion.div className="flex justify-center mb-8" variants={fadeInUp}>
+              <Image
+                src="/tag line.jpg"
+                alt="Tagline"
+                width={400}
+                height={80}
+                className="h-12 md:h-16 w-auto"
+              />
+            </motion.div>
+
             {/* Subheadline */}
             <motion.p
               className="text-xl md:text-2xl text-gray-300 mb-10 leading-relaxed max-w-2xl mx-auto"
