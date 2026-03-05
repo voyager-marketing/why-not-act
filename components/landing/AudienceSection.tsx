@@ -1,6 +1,6 @@
 'use client'
 
-import {Users, Church, Building2, Home, Medal, Landmark, BookOpen} from 'lucide-react'
+import {Users, Church, Building2, Home, Medal, Landmark, BookOpen, Download} from 'lucide-react'
 import Image from 'next/image'
 import {motion} from 'framer-motion'
 import {fadeInUp, staggerContainer, staggerContainerFast} from '@/lib/animations'
@@ -68,12 +68,19 @@ export function AudienceSection() {
           >
             Who We Serve
           </motion.span>
-          <motion.h2
-            className="heading-section text-3xl md:text-4xl lg:text-5xl text-white mb-4"
-            variants={fadeInUp}
-          >
-            Who This Is For
-          </motion.h2>
+          <motion.div className="flex items-center justify-between gap-4 mb-4" variants={fadeInUp}>
+            <h2 className="heading-section text-3xl md:text-4xl lg:text-5xl text-white">
+              Who This Is For
+            </h2>
+            <a
+              href="/WhyNotAct Integration proposal v4.pdf"
+              download
+              className="inline-flex items-center gap-2 px-4 py-2 bg-brand-500 hover:bg-brand-600 text-white text-sm font-semibold rounded-lg transition-colors duration-200 whitespace-nowrap"
+            >
+              <Download className="w-4 h-4" />
+              Download Proposal
+            </a>
+          </motion.div>
           <motion.p className="text-lg text-gray-400 max-w-2xl" variants={fadeInUp}>
             WhyNotAct is for everyone who believes in finding common ground.
           </motion.p>

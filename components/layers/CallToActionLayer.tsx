@@ -265,6 +265,14 @@ export default function CallToActionLayer({theme, persuasionScore}: Props) {
             info@whynotact.org
           </a>
         </p>
+        <a
+          href="/WhyNotAct Integration proposal v4.pdf"
+          download
+          className="inline-flex items-center gap-2 mt-4 px-4 py-2 bg-brand-500 hover:bg-brand-600 text-white text-sm font-semibold rounded-lg transition-colors duration-200"
+        >
+          <Download className="w-4 h-4" />
+          Download Proposal
+        </a>
       </motion.div>
 
       {/* Action Cards */}
