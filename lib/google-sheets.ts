@@ -10,10 +10,29 @@ function getAuth() {
     throw new Error('GOOGLE_CLIENT_EMAIL and GOOGLE_PRIVATE_KEY must be set')
   }
 
+  // Next.js can strip newlines from PEM keys - rebuild the proper format
+  const stripped = privateKey
+    .replace(/^"|"$/g, '')
+    .replace(/\\n/g, '')
+    .replace(/\n/g, '')
+    .replace(/\r/g, '')
+    .replace(/-----BEGIN PRIVATE KEY-----/, '')
+    .replace(/-----END PRIVATE KEY-----/, '')
+    .replace(/\s/g, '')
+
+  // Rebuild PEM with proper 64-char line wrapping
+  const base64Lines = stripped.match(/.{1,64}/g) || []
+  const formattedKey = [
+    '-----BEGIN PRIVATE KEY-----',
+    ...base64Lines,
+    '-----END PRIVATE KEY-----',
+    '',
+  ].join('\n')
+
   return new google.auth.GoogleAuth({
     credentials: {
       client_email: clientEmail,
-      private_key: privateKey.replace(/^"|"$/g, '').replace(/\\n/g, '\n'),
+      private_key: formattedKey,
     },
     scopes: ['https://www.googleapis.com/auth/spreadsheets'],
   })
