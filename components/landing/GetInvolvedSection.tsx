@@ -37,7 +37,7 @@ const involvementOptions = [
     title: 'Donate',
     description: 'Support our mission with a tax-deductible contribution.',
     cta: 'Make a Donation',
-    comingSoon: true,
+    href: '/donate',
   },
   {
     icon: Share2,
@@ -144,7 +144,7 @@ export function GetInvolvedSection() {
 
         {/* Involvement Options */}
         <motion.div
-          className="grid sm:grid-cols-2 lg:grid-cols-4 gap-0 border-t border-l border-white/20"
+          className="grid sm:grid-cols-2 lg:grid-cols-3 gap-0 border-t border-l border-white/20"
           initial="hidden"
           whileInView="visible"
           viewport={{once: true, margin: '-50px'}}

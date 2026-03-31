@@ -1,7 +1,7 @@
 'use client'
 
 import {useState} from 'react'
-import {Menu, X, ArrowRight} from 'lucide-react'
+import {Menu, X, ArrowRight, Heart} from 'lucide-react'
 import {Button} from '@/components/ui/button'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -65,7 +65,13 @@ export function NavigationBar() {
             </div>
 
             {/* Desktop CTA */}
-            <div className="hidden lg:flex items-center">
+            <div className="hidden lg:flex items-center gap-3">
+              <Link href="/donate">
+                <Button variant="ghost" className="border border-white/40 text-white hover:bg-white/10 hover:text-white px-5 py-5 font-bold uppercase tracking-wide rounded-none">
+                  <Heart className="mr-2 w-4 h-4" />
+                  Donate
+                </Button>
+              </Link>
               <Link href="/start">
                 <Button className="bg-brand-600 hover:bg-brand-700 text-white px-6 py-5 font-bold uppercase tracking-wide rounded-none">
                   Start Now
@@ -103,7 +109,13 @@ export function NavigationBar() {
                     {link.label}
                   </button>
                 ))}
-                <div className="pt-4 mt-4 border-t border-white/10">
+                <div className="pt-4 mt-4 border-t border-white/10 space-y-3">
+                  <Link href="/donate" onClick={() => setIsMobileMenuOpen(false)}>
+                    <Button variant="ghost" className="w-full border border-white/40 text-white hover:bg-white/10 hover:text-white font-bold uppercase tracking-wide rounded-none">
+                      <Heart className="mr-2 w-4 h-4" />
+                      Donate
+                    </Button>
+                  </Link>
                   <Link href="/start" onClick={() => setIsMobileMenuOpen(false)}>
                     <Button className="w-full bg-brand-600 hover:bg-brand-700 text-white font-bold uppercase tracking-wide rounded-none">
                       Start Now
