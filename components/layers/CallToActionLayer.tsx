@@ -1,6 +1,6 @@
 'use client'
 
-import {useState} from 'react'
+import {useState, useEffect} from 'react'
 import {motion} from 'framer-motion'
 import {usePostHog} from 'posthog-js/react'
 import type {Theme} from '@/types/form'
@@ -495,32 +495,17 @@ function DonateDialog() {
         Thank you so much for your desire to financially support WhyNotAct.org.
         We are a 501c3 non-profit corporation registered in the State of
         Virginia and have been approved by the IRS to take in tax deductible
-        donations. It is very important that you understand your donation is
-        being put to work to educate the US public on seeing the current
-        undocumented immigrant community residing in the United States as assets
-        and not liabilities.
+        donations. Your donation is being put to work to educate the US public
+        on seeing the current undocumented immigrant community as assets, not
+        liabilities.
       </p>
-      <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-        Under IRS definition, a 501c3 is allowed to use a small percentage of
-        donations for performing activities defined as "lobbying". These are
-        typically items intended to influence political thinking such as: letter
-        campaigns, signing petitions, and organizing in person meetings of
-        elected officials. As the work of WhyNotAct.org grows the allowable
-        percentage of donations drops. Therefore, as the effort grows we will
-        apply for the 501(h) election to ensure the viability and transparency
-        of our efforts defined as "grassroots lobbying". We will keep you
-        informed as the effort matures so you can make the best possible
-        decisions for your donations.
-      </p>
-      <Button
-        className="w-full bg-rose-600 hover:bg-rose-700 text-white"
-        onClick={() => {
-          window.open('https://donorbox.org', '_blank', 'noopener,noreferrer')
-        }}
-      >
-        <DollarSign className="w-4 h-4 mr-2" />
-        Donate via Donorbox
-      </Button>
+      <div className="flex justify-center">
+        <dbox-widget
+          campaign="why-not-act-research-education-website-and-social-media"
+          type="donation_form"
+          enable-auto-scroll="true"
+        />
+      </div>
     </div>
   )
 }
@@ -531,6 +516,16 @@ export default function CallToActionLayer({theme, persuasionScore}: Props) {
   const posthog = usePostHog()
 
   // Show all actions, sorted by priority
+  useEffect(() => {
+    if (!document.querySelector('script[src="https://donorbox.org/widgets.js"]')) {
+      const script = document.createElement('script')
+      script.src = 'https://donorbox.org/widgets.js'
+      script.type = 'module'
+      script.async = true
+      document.body.appendChild(script)
+    }
+  }, [])
+
   const availableActions = ACTIONS.sort((a, b) => a.priority - b.priority)
 
   const handleActionClick = (action: ActionCard) => {
@@ -702,7 +697,7 @@ export default function CallToActionLayer({theme, persuasionScore}: Props) {
 
       {/* Dialog Modals */}
       <Dialog open={openDialog !== null} onOpenChange={(open) => !open && setOpenDialog(null)}>
-        <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
+        <DialogContent className={`max-h-[90vh] overflow-y-auto ${openDialog === 'donate' ? 'max-w-2xl' : 'max-w-lg'}`}>
           <DialogHeader>
             <DialogTitle>{openDialog ? getDialogTitle(openDialog) : ''}</DialogTitle>
             <DialogDescription className="sr-only">
@@ -720,6 +715,28 @@ export default function CallToActionLayer({theme, persuasionScore}: Props) {
           {openDialog === 'donate' && <DonateDialog />}
         </DialogContent>
       </Dialog>
+
+      {/* Donate Section - Embedded Donorbox */}
+      <motion.div
+        initial={{opacity: 0, y: 20}}
+        animate={{opacity: 1, y: 0}}
+        transition={{delay: 0.6}}
+        className="mt-12"
+      >
+        <h3 className="text-2xl font-bold text-center text-gray-900 dark:text-gray-100 mb-2">
+          Support the Cause
+        </h3>
+        <p className="text-center text-gray-600 dark:text-gray-400 mb-6 max-w-xl mx-auto">
+          Your tax-deductible donation helps us educate the public and advocate for practical immigration reform.
+        </p>
+        <div className="flex justify-center">
+          <dbox-widget
+            campaign="why-not-act-research-education-website-and-social-media"
+            type="donation_form"
+            enable-auto-scroll="true"
+          />
+        </div>
+      </motion.div>
 
       {/* Final Message */}
       <motion.div
